@@ -1,0 +1,204 @@
+/* Workaround for a faint "phantom border" on rhs of permenantWidgets */
+QStatusBar::item {
+    border: none;
+}
+
+/*
+
+This was a hack and can now go
+
+#preferences_window[systeminfo_platform|='Darwin-2'] QTabBar::tab:selected {
+    background-color: #888888;
+}
+
+*/
+
+/* welcome window */
+
+    #welcome_window_frame {
+    }
+
+    #account_settings[checking=true] QLineEdit {
+        /*background-color: #DDDDDD;
+        color: #888888;*/
+    }
+
+    #welcome_window #account_settings QLineEdit {
+        height: 28px;
+        font-size: 14px;
+        border-radius: 0;
+        border: 1px solid rgba(0, 0 , 0, 64);
+        background-color: rgba(255, 255, 255, 128);
+    }
+
+    #welcome_window #account_settings QLineEdit[is_valid=false] {
+        border: 1px solid #FFAAAA;
+    }
+
+    #welcome_window QPushButton#btn_sign_in {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 19px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #FFFFFF;
+        background-color: #787878;
+        height: 28px;
+        border: none;
+    }
+
+    #welcome_window QPushButton#btn_sign_in[is_valid=false] {
+        color: #BBBBBB;
+        background-color: #DDDDDD;
+    }
+
+    #welcome_window #btn_network_settings,
+    #welcome_window #btn_help,
+    #welcome_window #btn_send_logs {
+        text-decoration: underline;
+        /*color: blue;*/
+        border: none;
+        background-color: none;
+        font-size: 13px;
+    }
+
+    #welcome_window #btn_network_settings,
+    #welcome_window #btn_help,
+    #welcome_window #btn_send_logs {
+    }
+
+    #welcome_window #error_message {
+        font-size: 12px;
+    }
+
+    #welcome_window #lbl_loading_txt {
+        font-size: 14px;
+    }
+
+    #welcome_window #lbl_network_settings,
+    #welcome_window #lbl_proxy_settings {
+        font-size: 14px;
+    }
+
+    /* delegated signin  */
+
+        #welcome_window QPushButton#btn_delegatedSignIn {
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 19px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #FFFFFF;
+            background-color: #787878;
+            height: 28px;
+            border: none;
+        }
+
+        #welcome_window #txt_delegatedSignIn {
+            font-size: 14px;
+        }
+
+    /* send logs to support */
+
+        #welcome_window #title_sending_logs_to_support {
+            font-size: 13px;
+        }
+
+        #welcome_window #log_ref {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+/* account tab */
+
+    #account_tab #welcome_label {
+        font-size: 12px;
+        font-weight: bold;
+    }
+    #account_tab #computer_name {
+        font-size: 12px;
+        color: #777777;
+        font-weight: bold;
+    }
+    #account_tab #welcome_text {
+        font-size: 11px;
+        margin-top: 10px;
+    }
+
+/* printers tab */
+
+    #printers_settings {
+        font-size: 11px;
+    }
+
+/* scales */
+
+    #scales_table {
+        font-size: 11px;
+    }
+
+/* settings */
+
+    /* printer settings */
+
+        #settings_tab #printing_settings_title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        #settings_tab #retain_printjobs {
+            margin-bottom: 10px;
+        }
+
+    /* network settings */
+
+        #settings_tab #network_settings_title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+    /* proxy settings */
+
+        #settings_tab #proxy_title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        #settings_tab QLineEdit[is_valid=false] {
+            color: red;
+            border: 2px solid #f00;
+        }
+        #settings_tab QLineEdit[is_valid=true] {
+        }
+
+        #btn_proxy_check_result[is_valid=true] {
+            color: green;
+        }
+        #btn_proxy_check_result[is_valid=false] {
+            color: red;
+        }
+
+/* logs view */
+
+    #logs_view {
+        font-size: 11px;
+    }
+
+    #logs_view::item {
+        border: 0px;
+        padding: 2px;
+    }
+
+
+/* debugging
+* {
+    border: 2px solid #f00;
+}
+*/

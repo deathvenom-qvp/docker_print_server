@@ -1,0 +1,35 @@
+{
+    "welcome_window": {
+        "window_title": "Direct Print Client {version}",
+        "account_settings": {
+            "email_placeholder": "Username",
+            "password_placeholder": "Password",
+            "InvalidAccount": "Account not found. Please check your username and try again.",
+            "InvalidPassword": "Account password incorrect. Please check and try again.",
+            "InvalidCredentials": "Sorry, we didn't recognize your sign-in details."
+        }
+    },
+    "systray" : {
+        "tooltip": "Direct Print Client"
+    },
+    "preferences" : {
+        "test_pdf_uri": "http://www.education.gov.yk.ca/pdf/pdf-test.pdf",
+        "window_title": "Direct Print Client {version_without_build}",
+        "account_settings": {
+            "welcome_label": "Welcome to Direct Print Client",
+            "email_label": "Username",
+            "password_label": "Password",
+            "computer_label": "Computer Name",
+            "show_print_history": true 
+        }
+    },
+    "edition_name_capitalised": "ventortech", 
+    "retain_printjobs_default": false,
+    "multiprocess_printing_default": true,
+    "scales_enabled": true,
+    "links_enabled": {
+        "cant_connect": true,
+        "help": true,
+        "website": true
+    }
+}

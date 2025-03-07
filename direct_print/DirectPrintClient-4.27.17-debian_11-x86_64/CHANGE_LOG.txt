@@ -1,0 +1,1057 @@
+4.27.17 (previous version 4.27.16)
+----------------------------------
+
+Features:
+
+- Added support for the 'Western M1 indicator' scale
+
+Bug fixes:
+
+- Fixed a bug in the 'Vibra ALE series (CBM output mode)' serial scale reader
+- Fixed a bug in the 'OHaus 3000 Ranger' serial scale reader
+- Fixed a bug in the 'OHaus Defender 6000 Xtreme(W)' serial scale reader
+- Fixed a bug in the 'Mettler Toledo ICS429' serial scale reader
+
+4.27.16 (previous version 4.27.15)
+----------------------------------
+
+Bug fixes:
+
+- Fixed a bug in the 'OHaus 3000 Ranger' serial scale reader
+
+4.27.15 (previous version 4.27.14)
+----------------------------------
+
+Bug fixes:
+
+- Fixed a bug in the 'AND EK-610i' serial scale reader
+- Fixed a bug in the 'OHaus 3000 Ranger' serial scale reader
+
+
+4.27.14 (previous version 4.27.13)
+----------------------------------
+
+Features:
+
+- Added support for the 'Mettler Toledo ICS429' scale
+- Added support for the 'AND EK-610i' scale
+- Added support for the 'OHaus 3000 Ranger' scale
+- Added support for the 'OHaus Defender 6000 Xtreme(W)' scale
+
+Bug fixes:
+
+- Improved handling of a large number of printer state changed OS messages
+
+4.27.13 (previous version 4.27.12)
+----------------------------------
+
+Features:
+
+- Modified the 'Mettler Toledo XPR205DR' serial scale reader to handle auxiliary messages gracefully
+- Added support for the 'Vibra ALE series' scale running in the CBM output mode
+- Added support for the 'Ohaus AX523AU' scale
+- Added support for the 'Ohaus EX1103N' scale
+- Added support for the 'SERVO BALANS SB3468' scale
+
+4.27.12 (previous version 4.27.11)
+----------------------------------
+
+Features:
+
+- Added support for the 'Mettler Toledo XPR205DR' scale
+
+Bug fixes:
+
+- Fixed a bug in the 'Mettler Toledo BBA442 - 35 LA' serial scale reader
+
+4.27.11 (previous version 4.27.10)
+----------------------------------
+
+Features:
+
+- Added support for the 'Mettler Toledo BBA442 - 35 LA' scale
+
+4.27.10 (previous version 4.27.9)
+---------------------------------
+
+Features:
+
+- Added support for the 'CAS SW-1CR5' scale
+
+Bug fixes:
+
+- Fixed a bug in the 'US Solid USS-DBS51-100' serial scale reader
+- Fixed a bug in the 'Kern & Sohn IOC 30K-2M' serial scale reader
+
+4.27.9 (previous version 4.27.8)
+--------------------------------
+
+Features:
+
+- Added support for 'US Solid USS-DBS51-100' and 'FLB ForeLibra model GM5002' scales
+
+Bug fixes:
+
+- Fixed a bug in the 'Kern & Sohn IOC 30K-2M' serial scale reader
+- Fixed a bug causing the "Retain printjobs after printing" to be reset after a restart
+
+4.27.8 (previous version 4.27.7)
+--------------------------------
+
+Features:
+
+- Improved error reporting
+- Added support for the 'KERN & Sohn GmbH DE12K1A' scale
+
+Bug fixes:
+
+- Fixed a bug resulting in incorrectly printing a subset of pages by default on MacOS when using Engine7
+
+4.27.7 (previous version 4.27.6)
+--------------------------------
+
+Bug fixes:
+
+- Floats allowed for width and height in the "Printers" tab of the web interface for MacOS and Linux
+- Fixed a bug preventing from showing all serial ports in the "Scales" tab of the web interface
+
+4.27.6 (previous version 4.27.5)
+--------------------------------
+
+Features:
+
+- Added support for 'Kern & Sohn IOC 30K-2M', 'UNIWAG A12 (XK3190-A12(E))' and 'Global Industrial 412552 (C18=4)' scales
+- Maximum number of HTTP redirects when downloading defaults to 10
+
+Bug fixes:
+
+- Fixed a rare bug preventing SSL connections being established in Windows
+- Fixed a proxy settings GUI issue on macOS
+- Client redacts proxy settings correctly when logging
+- Fixed a rare bug causing printers to be missing in the API if the 'Printers active by default' option is unchecked
+
+4.27.5 (previous version 4.27.4)
+--------------------------------
+
+Bug fixes:
+
+- Fixed a bug in the 'Ohaus Navigator NVT22000' serial scale reader
+
+4.27.4 (previous version 4.27.3)
+--------------------------------
+
+Features:
+
+- Added support for 'Brecknell S100', 'Mettler Toledo ICS425' and 'Mettler Toledo Spider SW' scales
+- Added OS version check in macOS
+
+Bug fixes:
+
+- Fixed a bug in the 'Ohaus Navigator NVT22000' serial scale reader
+- Setting 'retain_printjobs' in the config file is now respected
+- Fixed a GUI issue on macOS
+
+Compatibility:
+
+- Dropped support for macOS 10.15 (Catalina)
+
+4.27.3 (previous version 4.27.2)
+--------------------------------
+
+Features:
+
+- Added support for 'DOBYBOT DBB-C5' and 'DOBYBOT 3060A' scales
+- Updated Engine6 and Engine7 version
+- Added computer_name as a possible parameter in delegated_auth_endpoint setting
+
+Bug fixes:
+
+- Fixed bug in Engine7 on macOS
+
+4.27.2 (previous version 4.27.1)
+--------------------------------
+
+Features:
+
+- Added support for 'SellETon SL-7515' and 'Ohaus Navigator NVT22000' scales
+
+Bug fixes:
+
+- Fixed bug in the 'Mettler Toledo PS60' scale readers
+
+4.27.1 (previous version 4.27.0)
+-------------------------------
+
+Bug fixes:
+
+- Fixed bug in the 'AND FX-2000iN (DP format, e=10d)' scale reader
+
+4.27.0 (previous version 4.26.20)
+---------------------------------
+
+Features:
+
+- Dark mode support added for macOS
+- GUI refresh for macOS
+- Added support for 'Brecknell B140' and 'AND FX-2000iN (DP format, e=10d)' scales
+
+Bug fixes:
+
+- When signed in, preferences window is hidden, not minimised
+- Tray icon visible on macOS in both light and dark mode
+- Fixed bug in 'Mettler Toledo PS60' scale readers
+
+4.26.20 (previous version 4.26.19)
+----------------------------------
+
+Features:
+
+- Added support for 'Pennsylvania Scale Company Model 7500' and 'Mettler Toledo PS60' scales
+
+4.26.19 (previous version 4.26.18)
+----------------------------------
+
+Bug fixes:
+
+- Fixed bug in the printing options "bin", dpi", "media" and "paper" when an empty string is passed
+- Upgraded jQuery
+
+4.26.18 (previous version 4.26.17)
+----------------------------------
+
+Features:
+
+- Added support for 'CAS SWII' scale
+
+4.26.17 (previous version 4.26.16)
+----------------------------------
+
+Features:
+
+- Added support for 'Bizerba Weighing terminal ST' scale
+
+4.26.16 (previous version 4.26.15)
+----------------------------------
+
+Features:
+
+- Added support for 'Gram S3', 'Precix Weight 8513' and 'Ohaus EX423n' scales
+
+4.26.15 (previous version 4.26.14)
+----------------------------------
+
+Features:
+
+- Added support for 'Mettler Toledo ML 503', 'Ohaus AX223n/e' and 'Ohaus AX423n' scales
+- Changed maximum quantity of printouts (corresponding to "qty" attribute of POST /printjobs API call) from 100 to 999
+
+4.26.14 (previous version 4.26.13)
+----------------------------------
+
+Bug fixes:
+
+- Fixed bug in the 'Vibra AB(R)CE Series' scale reader
+
+4.26.13 (previous version 4.26.12)
+----------------------------------
+
+Features:
+
+- Added support for 'Vibra AB(R)CE Series' scale
+
+Bug fixes:
+
+- Printer id populating correctly when printer added as not active, then set to active
+
+4.26.12 (previous version 4.26.11)
+----------------------------------
+
+Features:
+
+- Added support for 'AND 4406A' and 'Transcell-150' scales
+- Upgraded 'Curl' HTTP library on Mac to use OpenSSL 1.1.1
+
+Bug fixes:
+
+- Fixed bug when printing RAW with the 'Parallel printing' option unset
+
+4.26.11 (previous version 4.26.10)
+----------------------------------
+
+Bug fixes:
+
+- Fixed bug in HTTP sign in mechanism
+
+4.26.10 (previous version 4.26.9)
+---------------------------------
+
+Features:
+
+- Updated Engine4 version
+
+Bug fixes:
+
+- Fixed bugs in 'OHaus Scout Pro' and 'Avery Weigh-Tronix 7800' serial scale readers
+
+4.26.9 (previous version 4.26.8)
+--------------------------------
+
+Bug fixes:
+
+- Fixed bug in the 'AND FG-60KBM' scale reader
+
+4.26.8 (previous version 4.26.7)
+--------------------------------
+
+Features:
+
+- Added support for 'AND FG-60KBM' scale
+
+4.26.7 (previous version 4.26.6)
+--------------------------------
+
+Features:
+
+- Added support for 'AND FX-2000i' scale
+
+4.26.6 (previous version 4.26.5)
+--------------------------------
+
+Bug fixes:
+
+ - Fixes bug in fit to page behaviour on macOS
+
+4.26.5 (previous version 4.26.4)
+--------------------------------
+
+Bug fixes:
+
+ - Added write timeout for serial scales
+
+4.26.4 (previous version 4.26.3)
+--------------------------------
+
+Features:
+
+ - Added support for 'Avery Weigh-Tronix 662' scale
+
+Bug fixes:
+
+ - Fixes bugs in 'AND Fz-3000i' and 'OHaus Scout Pro Print Format 2' serial scale readers
+ - Fixes bug in UI showing HTTP proxy support as HTTPS proxy
+
+4.26.3 (previous version 4.26.2)
+--------------------------------
+
+Bug fixes:
+
+ - Fixes bug in OHaus Scout Pro Print Format 2 scale
+
+4.26.2 (previous version 4.26.1)
+--------------------------------
+
+Features:
+
+ - Changes to POST /login, GET /connections related to HTTP sign in support
+ - Changes to CORS handling in HTTP interface. Allowed HTTP Origins include;
+   whitelisted origins, localhost and private IP addresses.
+
+Bug fixes:
+
+ - Fixes bug preventing proxy settings from being set in the UI
+ - Fixes bug related to USB scales detection on Windows when running as a desktop application
+
+4.26.1 (previous version 4.26.0)
+--------------------------------
+
+Features:
+
+ - More information returned for HTTP sign in endpoint POST /login
+ - Added support for 'Sartorius Quintix 124-1s' scale
+ - Added support for 'US Solid (USS-DBS10)' scale
+
+4.26.0 (previous version 4.25.1)
+--------------------------------
+
+Features:
+
+ - Added support for HTTP sign in
+
+4.25.1 (previous version 4.25.0)
+--------------------------------
+
+Features:
+
+ - Added support for 'Kern & Sohn IOC 60K-2M' scale
+ - Added support for 'CAS X320' scale
+
+4.25.0 (previous version 4.24.8)
+--------------------------------
+
+Features:
+
+ - Configurable support for printing in serial or parallel
+ - Improved disk performance handling directories with very large numbers of printjobs
+ - Dropped support for SHA1 digital signatures on windows
+ - Added support for "dpi" options in Engine4
+ - Added support for 'AND Fz-3000i (A&D standard format)' scale
+
+Bug fixes:
+
+ - "Worker exited" errors will not occur in serial printing
+ - Misc fixes to printing systems
+
+4.24.8 (previous version 4.24.7)
+---------------------------------
+
+Features:
+
+ - Added support for 'Doran DM5250' scale
+
+4.24.7 (previous version 4.24.6)
+--------------------------------
+
+Fixes:
+
+ - Fix to 'Rice Lake 480-2A Legend' scale
+
+4.24.6 (previous version 4.24.5)
+--------------------------------
+
+Features:
+
+ - Added support for 'DINI ARGEO DFW' scale
+
+Bug fixes:
+
+ - Prevent printer status messages being sent at high frequency to service
+ - Fix to 'Rice Lake 480-2A Legend' scale
+ - Fix to 'Avery Weigh-Tronix ZK840' scale
+
+4.24.5 (previous version 4.24.4)
+--------------------------------
+
+Features:
+
+ - Added support for 'Cambridge CSW-10AT' scale
+ - Added support for 'Adam Equpiment CBK-16' scale
+ - Added support for 'INSCALE LP7510A' scale
+
+4.24.4 (previous version 4.24.3)
+--------------------------------
+
+Bug fixes:
+
+ - CUPS duplex printing bug fix
+ - Dialog box text improvements
+
+
+4.24.3 (previous version 4.24.2)
+--------------------------------
+
+Features:
+
+ - Added support for 'Tor Rey PCS 20' scale
+
+4.24.2 (previous version 4.24.1)
+--------------------------------
+
+Features:
+
+ - Added support for 'SOEHLE 3xxx/94xx' (main/default data format of SOEHLE) scales
+ - Added support for 'RADWAG WLC60/C2/K' scale
+
+4.24.1 (previous version 4.24.0)
+--------------------------------
+
+Bug fixes:
+
+ - Update to 'KERN & Sohn GmbH KFB/KFN-TM' serial scale reader
+
+4.24.0 (previous version 4.23.1)
+--------------------------------
+
+Features:
+
+ - Updated client root certificates stores used for validating the trustworthiness of SSL / TLS certificates
+ - Add support for 'KERN & Sohn GmbH KFB/KFN-TM' scale
+
+Bug fixes:
+
+ - Windows installer installs fewer files depending on install type
+ - Windows installer warns about installing as a windows service
+ - Windows uninstaller deletes settings files when installed as a windows service
+
+4.23.1 (previous version 4.23.0)
+--------------------------------
+
+Features:
+
+ - Added support for 'OHaus Scout Pro' scale.
+
+4.23.0 (previous version 4.22.2)
+--------------------------------
+
+Features:
+
+ - Added support for standalone servers
+ - License can now be viewed locally from "About" tab
+
+4.22.2 (previous version 4.22.1)
+--------------------------------
+
+Bug fixes:
+
+ - Web interface starts on "Account" tab
+ - Login screen and application window no longer launch together on Linux
+
+4.22.2 (previous version 4.22.1)
+--------------------------------
+
+Bug fixes:
+
+ - Fixes issue with network code
+
+4.22.1 (previous version 4.22.0)
+--------------------------------
+
+Features:
+
+ - Updated Engine4 version
+ - Improved support for 'Avery Weigh-Tronix ZK840' at multiple precision measurements
+ - Added support for 'KERN & Sohn GmbH CKE' scale
+ - Added support for 'DEM Machines OCM - Systec IT-1' scale
+ - Added support for 'T-Scale WTP_WSP' scale
+
+Bug fixes:
+
+ - Fixes issue with USB scale message updates sent at a high frequency
+ - Fixes issue where OS username was not correctly determined
+
+4.22.0 (previous version 4.21.0)
+--------------------------------
+
+Features:
+
+ - Efficiency improvements for server/client communications
+ - Added support for 'Avery Weigh-Tronix ZK840' and 'GSE465' serial scales
+
+Bug fixes:
+
+ - Fixes bug in serial scales web UI
+ - Fixes regression in USB scales functionality when a scales is removed and re-added quickly
+
+4.21.0 (previous version 4.20.12)
+---------------------------------
+
+Features:
+
+ - Added support for 'OHaus Defender 3000 XtremeW' serial scale
+ - Added support for 'SOEHNLE CWE 7745' serial scale
+ - General improvements to USB scales
+
+4.20.12 (previous version 4.20.11)
+---------------------------------
+
+Bug fixes:
+
+ - Fixed bug where prints would remain stuck in a "queued" state
+ - Fixed bug handling very slow printjobs
+ - Improved handling of printer capabilities
+
+4.20.11 (previous version 4.20.10)
+---------------------------------
+
+Bug fixes:
+
+ - Fixed to raw printing on OSX and linux
+ - Added title to document when RAW printing
+ - Fixes rare bug causing client crash when removing a printer
+
+4.20.10 (previous version 4.20.7)
+---------------------------------
+
+Bug fixes:
+
+ - Fixed linux bug with USB scales
+ - Fixed bug in linux printer detection
+
+4.20.7 (previous version 4.20.6)
+--------------------------------
+
+Features and improvements:
+
+ - Added support for 'Ultraship U-2 scales' serial scale
+ - Updated Engine 4 version
+ - Fixes cors issue in HTTP API
+
+4.20.6 (previous version 4.20.5)
+--------------------------------
+
+Features and improvements:
+
+ - Added support for 'Avery Weigh-Tronix ZM301 scale' serial scale
+ - Added support for 'Rice Lake 480-2A Legend Series' serial scale
+ - Added support for 'Metler Toledo IND226' serial scale
+
+4.20.5 (previous version 4.20.4)
+--------------------------------
+
+Features and improvements:
+
+ - Added support for 'Global Model 300625' serial scale
+ - Added support for 'Fairbanks SCB-R9000-14ADV' serial scale
+ - Logout message accuracy improvements
+
+Known issues:
+
+ - USB scales sometimes doesn't doesn't work on Raspberry PI
+ - udev rule generator not supported on Raspberry PI
+
+4.20.4 (previous version 4.20.2)
+--------------------------------
+
+Bug fixes:
+
+ - Fixed linux bug
+
+Known issues:
+
+ - USB scales sometimes doesn't doesn't work on Raspberry PI
+ - udev rule generator not supported on Raspberry PI
+
+4.20.2 (previous version 4.20.2)
+--------------------------------
+
+Features and improvements:
+
+ - OSX and Linux support
+ - Engine 5, Engine 7 PDF printing supported
+
+Bug fixes:
+
+ - Fixed division by zero bug should a print happen "instantly"
+ - Fixed race condition in subprocess accessed whilst closing
+ - Fixed bug with printer description updates not being detected on OSX and Linux
+
+4.20.1 (previous version 4.20.1)
+--------------------------------
+
+Features and improvements:
+
+ - Logging of child worker processes including process creation, termination
+   and memory usage.
+ - Faster startup of worker processes via task specific setup functions
+ - Support for a maximum number of jobs per worker before worker restart
+ - Improved error messages around worker failures
+ - Improved error handling in workers
+ - Improved timing telemetry around fetching printer statuses
+
+Bug fixes:
+
+ - Fixed bug in worker pool relating to idle worker timeout
+ - Fixed bug preventing printing whilst initial printer status information is loading
+ - Increased job timeout from 30 to 60s
+
+Known issues:
+
+ - Engine4, Engine6 PDF printing not fully tested
+ - Windows only release
+
+4.20.0 beta (previous version 4.19.5)
+-------------------------------------
+
+Features and improvements:
+
+ - Parallel printing support via a multi-process architecture
+ - Parallel checking and updating of printer statuses and capabilities
+ - Support for new PrintJob "state" with timing information
+ - Improvements in timing telemetry
+ - Improvements in printing performance
+ - Increased number of download workers from three to five.
+
+Bug fixes:
+
+ - Fixed a n-squared performance problem when downloading a large number of printjobs
+   in parallel
+ - Fixed seg-fault when printing certain PDFs using Engine6
+ - Client more reliably acknowledges prints to server
+ - Slow printing tasks will not block other printing tasks
+ - Download time now measures time spend performing HTTP request instead of time
+   spent waiting for a download slot to become available and time spend performing
+   HTTP request.
+
+ Known issues:
+
+ - Engine4, Engine6 PDF printing error messages regressions
+ - Windows only release
+
+4.19.5 (previous version 4.19.4)
+--------------------------------
+
+Bug fixes:
+
+- Bug fix to serial scale reader "Avery Weigh-Tronix 7800"
+- Bug fix to serial scale reader "Adam Equipment CPWplus"
+
+4.19.4 (previous version 4.19.3)
+--------------------------------
+
+Features and improvements:
+
+- Added serial scale reader "Avery Weigh-Tronix 7800"
+- Added serial scale reader "Adam Equipment CPWplus"
+
+4.19.3 (previous version 4.19.2)
+--------------------------------
+
+Features and improvements:
+
+- Added serial scale reader "PCE Instruments PCE-PB-N"
+
+Bug fixes:
+
+- Serial scale name shorted for compatibility with PrintNode server
+- Fixed bug in handling of PrintJob states
+
+4.19.2 (previous version 4.19.1)
+--------------------------------
+
+Bug fixes:
+
+- Prevent Engine7 from being incorrectly displayed on Linux
+
+4.19.1 (previous version 4.19.0)
+--------------------------------
+
+Features and improvements:
+
+- Added support for --service-discovery-param command line argument
+
+4.19.0 (previous version 4.18.7)
+--------------------------------
+
+Features and improvements:
+
+- Initial support for serial scales
+- Printing Engine defaults changed to Engine 6 on Windows and Engine 7 on Darwin
+- Added support for high DPI displays (see command line argument --high-dpi-gui)
+- Added new devices to scales-blacklist
+
+Bug fixes:
+
+- Client cannot send out of spec scales.port data to a server
+
+4.18.7 (previous version 4.18.6)
+--------------------------------
+
+Features and improvements:
+
+- Added support for custom branded linux distributions
+- Added new devices to scales-blacklist
+
+4.18.6 (previous version 4.18.5)
+--------------------------------
+
+Features and improvements:
+
+- Web interface reloads on a client restart
+- Added new devices to scales-blacklist
+- Renamed command line are --log-it-all to --log-all
+- Change log is now ordered most recent releases first
+- Support for a "default config location" on Windows (%HOMEPATH%/.ExeName.con) and OSX (~/.ExeName.conf). ExeName will vary on edition.
+
+Bug fixes:
+
+- Windows service no longer enters a restart-loop if it cannot bind to local port for web interface
+- Web interface static assets are no longer cached by browsers
+- Fixes client crash if delegated authentication url is malformed
+- Fixes command line argument --settings-dir and config argument [settings].dir
+- Fixes command line argument --client-key
+- Reduced aggressive behaviour of NTP checker
+
+4.18.5 (previous version 4.18.4)
+--------------------------------
+
+Bug Fixes:
+
+- Added Web interface support for changing HTTP library
+
+4.18.4 (previous version 4.18.2)
+--------------------------------
+
+Bug Fixes:
+
+- Fixed default value for --no-windows-system-certs
+
+Features and improvements:
+
+- Added UI support for changing HTTP library and SSL verify options
+
+4.18.2 (previous version 4.17.19)
+---------------------------------
+
+Bug Fixes:
+
+- Fixed regression where "scales enabled" setting didn't persist across restarts
+- Fixed --no-ssl-verify for service discovery HTTP requests
+
+Features and improvements:
+
+- Update x509 CA Bundle to Mozilla's as of 2018-01-18
+- Added support for new ssl command line options --cacert-file and --no-windows-system-certs
+- Added support for changing the printing backend in the client web interface
+- Added support for HTTP libriary "requests"
+- Added support for switching HTTP libriary with --http-libriary
+- Engine6 / Adobe powered printing
+
+4.17.19 (previous version 4.17.18)
+----------------------------------
+
+Features and improvements:
+
+- Additional logging around a printer error case
+
+4.17.18 (previous version 4.17.17)
+----------------------------------
+
+Bug Fixes:
+
+- Startup mutex more reliable
+
+4.17.17 (previous version 4.17.16)
+----------------------------------
+
+Bug Fixes:
+
+- External links in the client can now be disabled
+
+4.17.16 (previous version 4.17.15)
+----------------------------------
+
+Bug Fixes:
+
+- Websocket messages no sent before web interface is ready to recieve
+- Fixes regression (introduced in 4.17.0) in proxy settings functionality
+
+4.17.15 (previous version 4.17.14)
+----------------------------------
+
+Features and improvements:
+
+- Digitally signed NSSM executables
+
+4.17.14 (previous version 4.17.13)
+----------------------------------
+
+Features and improvements:
+
+- Additional logging around printer listing functions
+
+4.17.13 (previous version 4.17.12)
+----------------------------------
+
+Bug fixes:
+
+- Errors which occour before the client finishes setting up are now logged
+- Client supports downloading urls which are out of spec by not being ASCII
+
+4.17.12 (previous version 4.17.11)
+----------------------------------
+
+Bug fixes:
+
+- Fixes RAW printing regression introduced in 4.17.6 in OSX and Linux
+- "Client is already running" check now works when the client is first run and not logged in
+
+4.17.11 (previous version 4.17.10)
+----------------------------------
+
+Bug fixes:
+
+- Client works with non-ascii Windows user names
+
+4.17.10 (previous version 4.17.9)
+---------------------------------
+
+Features and improvements:
+
+- Updated version of the HTTP library
+
+4.17.9 (previous version 4.17.8)
+--------------------------------
+
+Bug fixes:
+
+- Client web interface now supports copy and paste in Login screen
+
+4.17.8 (previous version 4.17.6)
+--------------------------------
+
+Bug fixes:
+
+- OSX printer states for online / offline now display correctly
+- Command line options to support retrying prints should a Win32m printing function timeout
+    --win32-print-retry-count=<int>
+    --win32-print-retry-delay=<int>
+
+4.17.6 (previous version 4.17.5)
+--------------------------------
+
+Bug fixes:
+
+- Failures to complete a RAW print on windows no longer blocks subsequent prints
+
+4.17.5 (previous version 4.17.4)
+--------------------------------
+
+Bug fixes:
+
+- Client web interface 'page title' is now correctly displayed
+
+4.17.4 (previous version 4.17.3)
+--------------------------------
+
+Bug fixes:
+
+- Regression causing client crash when printing property 'qty' is used on Windows
+
+4.17.3 (previous version 4.17.2)
+--------------------------------
+
+Bug fixes:
+
+- Client support downloading from HTTP servers which don't include a Reason-Phrase in the HTTP status line
+- Improved client error message when HTTP servers return a zero-length document to print.
+- Win32 msgfile.dll is now digitally signed
+
+4.17.2 (previous version 4.17.1)
+--------------------------------
+
+Features and improvements:
+
+- Client supports edition configurable HTTP connect and HTTP recieve timeout when downloading documents.
+
+4.17.1 (previous version 4.17.0)
+--------------------------------
+
+Bug fixes:
+
+- Launching as a Windows service now works correctly on certain 64-bit systems and Windows 10 Creators Update.
+- Client no longer crashes when run as a Windows service on certain systems.
+
+4.17.0 (previous version 4.15.0)
+--------------------------------
+
+Features and improvements:
+
+- Library updates.
+- Changes to client launch process on OSX including support for High Sierra, support for command line launch arguments and faster startup.
+- Updates to the weighing scales whitelist and blacklist.
+- HTTP authentication requests support redirection.
+- SSL verfication for client log submissions (all other HTTP requests already use verification).
+- Smaller installers for both OSX and Windows due to build system optimisations.
+
+4.15.0 (previous version 4.14.0)
+--------------------------------
+
+Bug fixes:
+
+- Malformed responses from delegated authentication requests are now handled correctly.
+- Multibyte charsets in HTTP response headers are now handled correctly.
+- Fixed failure to detect certain network printers if they have certain security bits set.
+- Inability to bind to web interface port no longer causes crash.
+- Upgrades from v4.6 or earlier directly to v4.12 or later no longer cause crash.
+
+Features and improvements:
+
+- Better logging in check crequentials requests.
+- Added support for "NTP discovery" to fix malware false positives from europe-pool.ntp.org.
+- Improved shutdown behaviour in client when closed quickly after starup.
+- Service discovery timeout increased.
+- Support for forcing single sided printing.
+- Improved Windows service functionality.
+- More functionality added to web interface.
+- Improved application exit codes, error handling and logging.
+- Updated project libriary depedencies.
+- Improved logging to the Windows Event Log.
+- Added support for native Windows Event Log messages. This removes the "Unknown event type..." line shown in Windows.
+- Added support for setting computer name by registry key.
+- New API endpoint: GET /printers/refresh.
+- Logs now explicity show computer ID and account ID.
+
+4.14.0 (previous version 4.12.0)
+--------------------------------
+
+Bug fixes:
+
+- "PDF printing default" not available bug on OSX after upgrading from a pre-4.6 version to 4.10.x or 4.12.x.
+- The date in the command line is now correctly formatted.
+- HTTP proxy bug fixed.
+- Text in the "Account" tab now wraps property so computer name and account name are always visible.
+
+Features and improvements:
+
+- Private beta support for Linux on x86, x86-64 and ARMv7 (for the Raspberry PI).
+- Beta support for running as a Windows service. Disabled by default.
+- Additional command line options.
+- Support for configuration files.
+- More resource-efficient, faster detection of weighing scales.
+- The blacklist of USB devices which are known not to be weighing scales has grown from 120 to over 2000. This significantly improves the client's ability to detect whether or not a USB device is a weighing scales without connecting to it.
+- Improved handling of certain rare Win32 printer errors.
+- Improved "client already running" error message on Windows.
+- Improved "client already running" error message on OSX with detail on how to close the existing process.
+- Faster startup times on OSX. The client now detects when it is running inside a .dmg. It logs this and doesn't attempt to add "login item" entries into OSX. In some circumstances this can dramatically improve startup times when launching the client.
+- An improved "startup mutex" for OSX. It should no longer be possible to run more than one instance of the client on OSX.
+- More logging.
+
+4.12.0 (previous version 4.10.0)
+--------------------------------
+
+Bug fixes:
+
+- Fixed a division by zero error if the client downloads a document very quickly.
+- Printers are no longer marked as "removed" on OSX based on isolated removal messages from the OS. This helps prevent false reports of printers being removed.
+- OSX printer status checking is now much more tolerant of failures and less likely to crash the client.
+- Client registers "printer capabilities" at all times instead of just at startup.
+- Restarting the Win32 print spooler no longer crashes the client.
+- Printer IDs in the "Printers" tab are now reliable.
+- Worked around bug in PyWin32 which was causing printer tray names to be reported incorrectly.
+- The client no longer takes an exclusive lock on weighing scale devices. Other software can access scales concurrently.
+
+Features and improvements:
+
+- The client is digitally signed for OSX.
+- "Send logs to support" is available from the welcome window.  This helps diagnose problems logging in.
+- Support for HTTP, SOCKS4 and SOCKS5 proxies.
+- Changed to a different HTTP library. This makes downloads approximately 5% faster and establishing a HTTPS connection approximately 10% faster.
+- Major improvements to the PrintJob download and retrieval code.
+- Support for HTTP redirects when downloading documents.
+- Added support for Zero Knowledge printing when using Delegated Authentication.
+- Support for deletion of used documents via an optional HTTP response header from the file server.
+- A new "settings" tab with a checkbox to allow users to tell a client not to keep documents.  This is enabled by default.
+- Support for running multiple simultaneous installations on the same computer via the --config-dir command line option.
+- Support for running without a GUI via the --headless command line option.
+- Support for setting credential information in enviroment variables.
+- Many new command line options (see --help for details).
+- Preliminary support for running as a native Win32 service via NSSM.
+- Slightly more graceful (and faster) shutdown.
+- Significantly lower memory requirements and when printing many (100,000+) documents between restarts and greatly improved performance when printing large numbers of documents.
+- Welcome window now sends additional information to server inclusing version and computer info.
+- Improved capturing of timing information as a PrintJob moves through it's lifecycle.
+- Support for accessing and controlling all aspects of the client via the web interface.
+- In Windows, the client now logs information to the Win32 Event Log.
+- Support for specific exit codes for different types of error.
+- Win32 driver information is now logged.
+- Win32 human readable error handling for certain classes of printing error.
+- Win32 operating system printing errors are now shown in the logs tab.
+- Win32 PrintJobStatus logging improved, including detailed timing info.
+- OSX now logs more info on PrintJob failure.
+- Better support for certain types of malformed PDFs on OSX.
+- New internal data structures for storing printing history and states to better handle the sitation of long running clients which print large numbers of documents.
+- Improvements to the appearance of the GUI in OSX.
+- Better keyboard support in OSX, specifically on the login screen.
+- Improvements to error messages from RAW printing.
+- Updated a number of dependencies to their latest versions.
+- Added some USB devices to the scales blacklist.
+- Timing information in the "logs" tab is now ISO-8601 formatted.

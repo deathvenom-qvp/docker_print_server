@@ -1,0 +1,22 @@
+{
+    "build_time": "2024-04-27T01:30:15",
+    "build_machine": {
+        "system": "Linux",
+        "platform": "Linux-5.10.0-28-amd64-x86_64-with-glibc2.29",
+        "machine": "x86_64",
+        "architecture": "64bit",
+        "host": "debian11buildsystem"
+    },
+    "client": {
+        "commit": "516e557b6b6fafe3c3190460eca09f595050e4e0",
+        "datetime": "2024-03-01T22:02:04"
+    },
+    "clientbuildsystem": {
+        "commit": "7f4053d2aa4c3dee68f6fb7e1e3dd5c295d3c325",
+        "datetime": "2023-04-11T13:50:42"
+    },
+    "clienteditions": {
+        "commit": "9d8e7b2e706215b05df31a7e1cb30fec8382ccf4",
+        "datetime": "2023-04-07T10:05:12"
+    }
+}

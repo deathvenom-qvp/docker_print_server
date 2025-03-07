@@ -1,0 +1,41 @@
+
+services:
+  directprintclient:
+    build: ./direct_print
+    container_name: directprintclient
+    restart: unless-stopped
+    ports:
+      - "8888:8888"  # Adjust if your DirectPrintClient listens on a different port
+
+  cups:
+    image: olbat/cupsd
+    container_name: cups
+    restart: unless-stopped
+    environment:
+      - CUPS_USER_ADMIN=admin
+      - CUPS_USER_PASSWORD=adminpassword
+    volumes:
+      - ./cups_data:/etc/cups
+      - ./printers:/var/spool/cups
+    ports:
+      - "631:631"
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "8631:8631"  # Nginx will listen on 8631 and proxy requests to CUPS
+
+  samba:
+    build: ./samba
+    container_name: samba
+    restart: unless-stopped
+    environment:
+      - USERNAME=printuser
+      - PASSWORD=printpassword
+    volumes:
+      - ./printers:/printers  # Share the same printers folder used by CUPS
+    ports:
+      - "139:139"
+      - "1445:445"  # Map external port 1445 to container port 445 (since Windows often reserves 445)

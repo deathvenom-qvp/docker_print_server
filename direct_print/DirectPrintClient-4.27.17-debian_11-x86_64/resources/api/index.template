@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>{window_title}</title>
+
+    <link href="{static_dir_prefix}/static/css/styles.css" rel="stylesheet">
+    <script type="text/javascript" src="{static_dir_prefix}/static/js/jquery-3.6.1.min.js"></script>
+    <script type="text/javascript" src="{static_dir_prefix}/static/js/lodash.min.js"></script>
+    <script type="text/javascript" src="{static_dir_prefix}/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="{static_dir_prefix}/static/js/maquette.umd.js"></script>
+    <script type="text/javascript">
+      var accountSettings = {account_settings};
+      var build = {build};
+      var scalesEnabled = {scales_enabled};
+      var isDelegatedSignin = {is_delegated_signin};
+      var delegatedSigninEndpoint = {delegated_signin_endpoint};
+      var allowShutdown = {allow_shutdown};
+      var printerMediaSizeSettable = {printer_media_size_settable};
+      var instanceId = {instance_id};
+      var logSubmissionEnabled = {log_submission_enabled};
+    </script>
+    <script type="text/javascript" src="{static_dir_prefix}/static/base.js"></script>
+  </head>
+
+  <body>
+    <div class='loading-interface'>{version} client interface loading ...</div>
+    <div class="page-wrap app-content">
+      <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav navbar-left">
+          <li ref="login"><a href="#login">Login</a></li>
+          <li ref="printers"><a href="#printers">Printers</a></li>
+          <li ref="scales"><a href="#scales">Scales</a></li>
+          <li ref="settings"><a href="#settings">Settings</a></li>
+          <li ref="logs"><a href="#logs">Logs</a></li>
+          <li ref="about"><a href="#about">About</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <p class="navbar-text">{version}</p>
+          <li style="display: none;"><a class="client-shutdown" href="#">Shutdown</a></li>
+        </ul>
+      </nav>
+
+      <div class="container-fluid content-tab" id="login">
+        <!-- delegated signin -->
+        <div class="row login delegated-signin" style="display: none;">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <h2>Login</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                You are currently logged out. To log in, please go to the <a href={delegated_signin_endpoint} target="_blank">login webpage</a>.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- form based login -->
+        <div class="row login email-password-signin" style="display: none;">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="btn">
+                  <h2>Login</h2>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <form class="form-horizontal login-form">
+              <div class="form-group has-error"></div>
+              <div class="form-group">
+                <label for="email" class="control-label col-sm-2">Email</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="email" id="login-email" placeholder="Email">
+                  <label style="display: none;" class="login-email-error" for="login-email"></label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="control-label col-sm-2">Password</label>
+                <div class="col-sm-4">
+                  <input type="password" class="form-control" name="password" id="login-password" placeholder="Password">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-2">
+                  <button type="button" class="login-submit btn btn-primary">Login</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2">
+                  <a class='login-proxy-settings noselect'>Proxy settings</a>
+                </div>
+              </div>
+              <div class="form-group has-error">
+                <div class="col-sm-9 col-sm-offset-2 login-error"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- logged in display -->
+        <div class="row account">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="btn">
+                  <h2>Account</h2>
+                </div>
+              </div>
+            </div>
+            <p class="has-computer-name">
+              You are connected with account <span class='email'></span> and are using computer <span class='computer'></span>.
+            </p>
+            <p class="unknown-computer-name">
+              You are connected using computer <span class='computer'></span>.
+            </p>
+            <div class="row">
+              <div class="col-md-3">
+                <button type="button" class="btn btn-default logout-action">Logout</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid content-tab" id="printers">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="btn">
+              <h2>Printers</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <form class="form-inline">
+              <div class="form-group printers-active-default">
+                <input type="checkbox" id="printers-active-default">
+              </div><label for="printers-active-default" class="noselect">Printers active by default</label>
+            </form>
+          </div>
+          <div class="col-md-9 printer-settings-rhs-col">
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="printer-power-availability" class="noselect">Default printing backend</label>
+                <select class="form-control" id="printer-power-availability"></select>
+              </div>
+            </form>
+            <form class="form-inline multiprocess-printing-form">
+              <div class="form-group">
+                <label for="printers-active-default" class="noselect">Parallel printing</label>
+                <input type="checkbox" id="multiprocess-printing">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-container">
+              <table class="table table-condensed printers">
+                <thead>
+                  <tr>
+                    <th class='printer_active'>Active</th>
+                    <th class='printer_id'>Id</th>
+                    <th>Printer</th>
+                    <th class='status'>Status</th>
+                    <th class='page_width printer_media_size_settable'>Width (inches)</th>
+                    <th class="page_height printer_media_size_settable">Height (inches)</th>
+                  </tr>
+                </thead>
+                <tbody class='printers'>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid content-tab" id="scales">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="btn">
+              <h2>Scales</h2>
+            </div>
+            <button class="btn btn-default scales-refresh">Refresh</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+          <form class="form-inline">
+            <div class="form-group scales-enabled">
+              <input type="checkbox" id="scales-enabled">
+            </div><label for="scales-enabled" class="noselect">Scales enabled</label>
+          </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <h3>USB Scales</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-container">
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="col-md-10">Name</th>
+                    <th class="col-md-2">Mass</th>
+                  </tr>
+                </thead>
+                <tbody class='usb-scales'>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <h3>Serial Scales</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group form-inline add-serial-scale">
+              <label class='noselect'>COM Ports</label>
+              <span id="comports-projector"></span>
+              <label class='noselect'>Type</label>
+              <span id="scaletype-projector"></span>
+              <button class="btn btn-default serial-scale-add">Add Scale</button>
+            </div>
+            <div class="no-com-ports">
+              No COM ports available.
+            </div>
+            <div id="serialscales-projector"></div>
+            <div class="serialscaleslog">
+              <h3>Log</h3>
+              <div id="serialscaleslog-projector"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid content-tab" id="settings">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="btn">
+              <h2>Settings</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+
+            <form class="form-horizontal printing-settings">
+              <div class="form-group">
+                <label class="control-label col-sm-2 noselect">Printing Settings</label>
+                <div class="col-sm-4 checkbox">
+                  <label class='noselect'>
+                    <input type='checkbox' class="retain-printjobs"/>
+                    Retain printjobs after printing
+                  </label>
+                </div>
+              </div>
+            </form>
+
+            <form class="form-horizontal network-settings">
+              <div class="form-group">
+                <label class="control-label col-sm-2 noselect">Network Settings</label>
+                <div class="col-sm-4 checkbox">
+                  <label class='noselect'>
+                    <input type='checkbox' class="ssl-verify"/>
+                    Verify SSL/TLS peer
+                  </label>
+                </div>
+              </div>
+              <div class="form-group form-inline">
+                <div class="col-sm-5 col-sm-offset-2">
+                  <span class='noselect'>HTTP library</span>
+                  <select class="form-control http-engine">
+                    <option value='pycurl'>Curl</option>
+                    <option value='requests'>Requests</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+
+            <form class="form-horizontal proxy-settings">
+              <div class="form-group">
+                <label for="proxy-type" class="control-label col-sm-2">Proxy Settings</label>
+                <div class="col-sm-4">
+                  <select class="form-control" id="proxy-type">
+                    <option value='null'>Do not use a proxy</option>
+                    <option value='http'>HTTP</option>
+                    <option value='socks4'>SOCKS v4a</option>
+                    <option value='socks5'>SOCKS v5</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-inline proxy-form">
+                <div class="col-sm-5 col-sm-offset-2">
+                  <span><input type="text" class="form-control" name="proxy-host" id="proxy-host" placeholder="Host"></span>
+                  <span><input type="text" class="form-control" name="proxy-port" id="proxy-port" maxlength="6" pattern="\d*" placeholder="Port"></span>
+                </div>
+              </div>
+              <div class="form-group proxy-form">
+                <div class="col-sm-4 col-sm-offset-2 checkbox">
+                  <label class='noselect'>
+                    <input type="checkbox" id="proxy-requires-auth"/>
+                    Proxy server requires a password
+                  </label>
+                </div>
+              </div>
+              <div class="form-group form-inline proxy-form">
+                <div class="col-sm-5 col-sm-offset-2">
+                  <input type="text" class="form-control" name="proxy-username" id="proxy-username" placeholder="Username">
+                  <input type="password" class="form-control" name="proxy-password" id="proxy-password" placeholder="Password">
+                </div>
+              </div>
+
+              <div class="form-group form-inline proxy-form">
+                <div class="col-sm-9 col-sm-offset-2">
+                  <button type="button" class="proxy-check btn btn-primary" id="proxy-check">Check</button>
+                </div>
+              </div>
+
+              <div class="form-group has-error proxy-form">
+                <div class="col-sm-9 col-sm-offset-2" id="proxy-check-message">chk message</div>
+              </div>
+
+              <div class="col-sm-offset-2 back-to-login">
+                <a href='#'>Back to login</a>
+              </div>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid content-tab" id="logs">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="btn">
+              <h2>Logs</h2>
+            </div>
+            <button class="btn btn-default send-to-support">Send to support</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-container">
+              <table class="table table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th class="col-md-3">Date and Time <span class='timezone'></span></th>
+                    <th class="col-md-9">Details</th>
+                  </tr>
+                </thead>
+                <tbody class='logs'>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid content-tab" id="about">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="btn">
+                  <h2>System / Process</h2>
+                </div>
+              </div>
+            </div>
+            <p>
+              System: <span class='system'></span><br/>
+              Hostname: <span class='hostname'></span><br/>
+              Username: <span class='username'></span><br/>
+              Platform: <span class='platform'></span><br/>
+              Pid: <span class='pid'></span><br/>
+              Client Runtime: <span class='started ago'></span><br/>
+              Threads / Memory: <span class='threads'></span> / <span class='memory_usage'></span><br/>
+              Logs Directory: {logs_dir}<br/>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="btn">
+                  <h2>Copyright</h2>
+                </div>
+              </div>
+            </div>
+            <p>
+              &copy; PrintNode Ltd {year}. PrintNode is a trademark of PrintNode Ltd.<br>
+              <a href="https://www.printnode.com">www.printnode.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="system-information app-content">
+      <p>
+        <!-- Process: <span class='pid'></span> / <span class='uptime'></span><br> -->
+        Connection: <span class='connection'></span> / <span class='connection_uptime ago'></span><br>
+      </p>
+    </div>
+
+  </body>
+</html>
