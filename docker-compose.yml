@@ -6,6 +6,8 @@ services:
     restart: unless-stopped
     ports:
       - "8888:8888"  # Adjust if your DirectPrintClient listens on a different port
+    networks:
+      - printnet
 
   cups:
     image: olbat/cupsd
@@ -17,15 +19,22 @@ services:
     volumes:
       - ./cups_data:/etc/cups
       - ./printers:/var/spool/cups
-    ports:
-      - "631:631"
+    expose:
+      - "631"    
+    networks:
+      - printnet
 
   nginx:
-    build: ./nginx
-    container_name: nginx
-    restart: unless-stopped
+    image: nginx:latest
+    container_name: cups-proxy
+    depends_on:
+      - cups
     ports:
-      - "8631:8631"  # Nginx will listen on 8631 and proxy requests to CUPS
+      - "8631:8631"      # Host port -> Nginx listens on 8631
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - printnet
 
   samba:
     build: ./samba
@@ -39,3 +48,7 @@ services:
     ports:
       - "139:139"
       - "1445:445"  # Map external port 1445 to container port 445 (since Windows often reserves 445)
+
+networks:
+  printnet:
+    driver: bridge
