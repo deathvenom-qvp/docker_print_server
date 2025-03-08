@@ -1,13 +1,20 @@
 
+
+networks:
+  printnet:  # Now managed by Docker Compose
+    name: printnet  # Force the exact name to prevent prefixing
+    driver: bridge  # Standard bridge network
+
+
 services:
   directprintclient:
     build: ./direct_print
     container_name: directprintclient
     restart: unless-stopped
     ports:
-      - "8888:8888"  # Adjust if your DirectPrintClient listens on a different port
+      - "8888:8888"
     networks:
-      - printnet
+      - printnet  # Attaches to printnet
 
   cups:
     image: olbat/cupsd
@@ -16,25 +23,16 @@ services:
     environment:
       - CUPS_USER_ADMIN=admin
       - CUPS_USER_PASSWORD=adminpassword
+      - CUPS_WEBINTERFACE=yes
+
     volumes:
       - ./cups_data:/etc/cups
       - ./printers:/var/spool/cups
-    expose:
-      - "631"    
-    networks:
-      - printnet
-
-  nginx:
-    image: nginx:latest
-    container_name: cups-proxy
-    depends_on:
-      - cups
+      - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf
     ports:
-      - "8631:8631"      # Host port -> Nginx listens on 8631
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - "8631:631"  # External port 8631 -> container’s 631
     networks:
-      - printnet
+      - printnet  # Attaches to printnet
 
   samba:
     build: ./samba
@@ -44,11 +42,9 @@ services:
       - USERNAME=printuser
       - PASSWORD=printpassword
     volumes:
-      - ./printers:/printers  # Share the same printers folder used by CUPS
+      - ./printers:/printers
     ports:
       - "139:139"
-      - "1445:445"  # Map external port 1445 to container port 445 (since Windows often reserves 445)
-
-networks:
-  printnet:
-    driver: bridge
+      - "1445:445"
+    networks:
+      - printnet  # Attaches to printnet
