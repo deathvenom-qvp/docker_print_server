@@ -13,20 +13,26 @@ RUN apt-get update && \
     cups-ipp-utils \
     cups-pdf \
     printer-driver-all \
+    samba \
+    samba-common-bin \
+    smbclient \
+    cifs-utils \
     && rm -rf /var/lib/apt/lists/*
 
 
 # Copy your Direct Print app into the container
-COPY DirectPrintClient-4.27.17-debian_11-x86_64/ /opt/directprint/
+COPY direct_print/DirectPrintClient-4.27.17-debian_11-x86_64/ /opt/directprint/
+
+COPY smb.conf /etc/samba/smb.conf
+
 
 RUN ldconfig
-
 RUN chmod +x /opt/directprint/DirectPrintClient
 RUN chmod +x /opt/directprint/init.sh
 
 # Expose ports if your app listens on any (optional)
-# EXPOSE 1234
+EXPOSE 631 139 445
 
 # Set the app as the container's main process
 # CMD ["/opt/directprint/init.sh"]
-CMD cups-browsed & cupsd -f & /opt/directprint/DirectPrintClient --headless --shutdown-on-sigint --web-interface --remove-scales-support
+ENTRYPOINT ["/bin/sh", "-c", "cupsd -f & smbd && nmbd && /opt/directprint/DirectPrintClient --headless --shutdown-on-sigint --web-interface --remove-scales-support"]

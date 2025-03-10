@@ -1,1 +1,0 @@
-FROM dperson/samba:latest

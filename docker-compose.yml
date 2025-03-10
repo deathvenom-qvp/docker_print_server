@@ -19,25 +19,12 @@ services:
       - ./cups_data:/etc/cups  # Mount CUPS configuration
       - ./printers:/var/spool/cups  # Mount print queue
       - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf  # Override cupsd.conf
+      - ./smb.conf:/etc/samba/smb.conf:ro  # <- Mount from correct location
     ports:
       - "8888:8888"
       - "631:631"
+      - "1139:139"  # Samba NetBIOS Session
+      - "1445:445"  # Samba SMB Direct
     networks:
       - printnet  # Attaches to printnet
 
-
-
-  samba:
-    build: ./samba
-    container_name: samba
-    restart: unless-stopped
-    environment:
-      - USERNAME=printuser
-      - PASSWORD=printpassword
-    volumes:
-      - ./printers:/printers
-    ports:
-      - "139:139"
-      - "1445:445"
-    networks:
-      - printnet  # Attaches to printnet
