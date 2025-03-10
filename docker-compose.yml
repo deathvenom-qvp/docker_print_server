@@ -11,28 +11,21 @@ services:
     build: ./direct_print
     container_name: directprintclient
     restart: unless-stopped
-    ports:
-      - "8888:8888"
-    networks:
-      - printnet  # Attaches to printnet
-
-  cups:
-    image: olbat/cupsd
-    container_name: cups
-    restart: unless-stopped
     environment:
       - CUPS_USER_ADMIN=admin
       - CUPS_USER_PASSWORD=adminpassword
       - CUPS_WEBINTERFACE=yes
-
     volumes:
-      - ./cups_data:/etc/cups
-      - ./printers:/var/spool/cups
-      - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf
+      - ./cups_data:/etc/cups  # Mount CUPS configuration
+      - ./printers:/var/spool/cups  # Mount print queue
+      - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf  # Override cupsd.conf
     ports:
-      - "8631:631"  # External port 8631 -> container’s 631
+      - "8888:8888"
+      - "631:631"
     networks:
       - printnet  # Attaches to printnet
+
+
 
   samba:
     build: ./samba
