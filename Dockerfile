@@ -1,5 +1,5 @@
 FROM debian:11-slim
-
+RUN echo "root:adminpassword" | chpasswd
 RUN echo "deb http://deb.debian.org/debian bullseye-backports main" \
     > /etc/apt/sources.list.d/bullseye-backports.list
 

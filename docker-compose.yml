@@ -8,18 +8,22 @@ networks:
 
 services:
   directprintclient:
-    build: ./direct_print
+    build:
+      context: . # ✅ This tells Docker to use the current directory
+      dockerfile: Dockerfile  # ✅ Explicitly specify the Dockerfile name
     container_name: directprintclient
     restart: unless-stopped
     environment:
       - CUPS_USER_ADMIN=admin
       - CUPS_USER_PASSWORD=adminpassword
       - CUPS_WEBINTERFACE=yes
+      - CUPSADMIN=batman
+      - CUPSPASSWORD=batcave_password
     volumes:
       - ./cups_data:/etc/cups  # Mount CUPS configuration
       - ./printers:/var/spool/cups  # Mount print queue
       - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf  # Override cupsd.conf
-      - ./smb.conf:/etc/samba/smb.conf:ro  # <- Mount from correct location
+      - ./smb.conf:/etc/samba/smb.conf # <- Mount from correct location
     ports:
       - "8888:8888"
       - "631:631"
