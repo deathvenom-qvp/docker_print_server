@@ -17,6 +17,9 @@ RUN apt-get update && \
     samba-common-bin \
     smbclient \
     cifs-utils \
+    python3 \
+    python3-cups \
+    # wsdd \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -30,9 +33,17 @@ RUN ldconfig
 RUN chmod +x /opt/directprint/DirectPrintClient
 RUN chmod +x /opt/directprint/init.sh
 
-# Expose ports if your app listens on any (optional)
-EXPOSE 631 139 445
+ENV PYTHONUNBUFFERED=1
 
-# Set the app as the container's main process
-# CMD ["/opt/directprint/init.sh"]
+# Expose ports if your app listens on any (optional)
+EXPOSE 631 139 445 8888
+
+# RUN adduser --disabled-password --gecos "" officeprinters && \
+# # RUN adduser --gecos "" officeprinters && \
+#     (echo "printers"; echo "printers") | smbpasswd -a officeprinters -s
+RUN printf "printers\nprinters\n" | smbpasswd -s -a root
+
+
+
 ENTRYPOINT ["/bin/sh", "-c", "cupsd -f & smbd && nmbd && /opt/directprint/DirectPrintClient --headless --shutdown-on-sigint --web-interface --remove-scales-support"]
+

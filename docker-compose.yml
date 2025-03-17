@@ -14,11 +14,7 @@ services:
     container_name: directprintclient
     restart: unless-stopped
     environment:
-      - CUPS_USER_ADMIN=admin
-      - CUPS_USER_PASSWORD=adminpassword
       - CUPS_WEBINTERFACE=yes
-      - CUPSADMIN=batman
-      - CUPSPASSWORD=batcave_password
     volumes:
       - ./cups_data:/etc/cups  # Mount CUPS configuration
       - ./printers:/var/spool/cups  # Mount print queue
@@ -27,8 +23,8 @@ services:
     ports:
       - "8888:8888"
       - "631:631"
-      - "1139:139"  # Samba NetBIOS Session
-      - "1445:445"  # Samba SMB Direct
+      - "139:139"  # Samba NetBIOS Session
+      - "445:445"  # Samba SMB Direct
     networks:
       - printnet  # Attaches to printnet
 
