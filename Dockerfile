@@ -10,10 +10,10 @@
 # - DirectPrintClient for Odoo Direct Print integration
 #
 # Host OS can be any Docker-compatible system (Linux, Windows, macOS)
-# The container runs Debian 11 internally.
+# The container runs Ubuntu 22.04 LTS internally (supported until April 2027).
 #
 # =============================================================================
-FROM debian:11-slim
+FROM ubuntu:22.04
 
 # =============================================================================
 # Build Arguments (can be overridden at build time or via .env)
@@ -23,10 +23,18 @@ ARG SAMBA_PASSWORD=printers
 ARG SAMBA_USER=printuser
 
 # =============================================================================
+# Prevent interactive prompts during package installation
+# =============================================================================
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# =============================================================================
 # Install Dependencies
 # =============================================================================
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
+    # Timezone data (required for Ubuntu)
+    tzdata \
     # CUPS and printing
     cups \
     cups-client \
@@ -72,13 +80,16 @@ RUN echo "root:${CUPS_ADMIN_PASSWORD}" | chpasswd
 RUN useradd -r -s /sbin/nologin ${SAMBA_USER}
 
 # =============================================================================
-# Copy DirectPrintClient
+# Copy and Extract DirectPrintClient
 # =============================================================================
 # The DirectPrintClient binary connects to Odoo via Direct Print module
-# To update: replace the contents of directprint/DirectPrintClient-X.XX.XX-debian_11-x86_64/
-COPY directprint/DirectPrintClient-4.27.17-debian_11-x86_64/ /opt/directprint/
+# ADD automatically extracts tar.gz files
+# To update: download new version from Ventor Tech and replace the tar.gz file
+ADD directprint/DirectPrintClient-4.27.12-ubuntu-22.04-x86_64.tar.gz /opt/
 
-RUN ldconfig && \
+# Rename to consistent path and set permissions
+RUN mv /opt/DirectPrintClient-4.27.12-ubuntu-22.04-x86_64 /opt/directprint && \
+    ldconfig && \
     chmod +x /opt/directprint/DirectPrintClient && \
     chmod +x /opt/directprint/init.sh
 
