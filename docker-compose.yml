@@ -73,10 +73,12 @@ services:
       - "631:631"
 
       # Samba NetBIOS Session
-      - "139:139"
+      # Note: On Windows hosts, use alternate ports (1139/1445) since Windows uses 139/445
+      # On Linux/macOS hosts or production VMs, use standard ports (139/445)
+      - "${SMB_NETBIOS_PORT:-1139}:139"
 
       # Samba SMB Direct (Windows file/printer sharing)
-      - "445:445"
+      - "${SMB_PORT:-1445}:445"
 
       # wsdd WS-Discovery (Windows network discovery)
       - "3702:3702/udp"

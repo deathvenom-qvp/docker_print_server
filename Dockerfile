@@ -25,11 +25,7 @@ ARG SAMBA_USER=printuser
 # =============================================================================
 # Install Dependencies
 # =============================================================================
-RUN echo "deb http://deb.debian.org/debian bullseye-backports main" \
-    > /etc/apt/sources.list.d/bullseye-backports.list
-
 RUN apt-get update && \
-    apt-get install -y -t bullseye-backports libcurl4 && \
     apt-get install -y \
     # CUPS and printing
     cups \
@@ -44,15 +40,25 @@ RUN apt-get update && \
     samba-common-bin \
     smbclient \
     cifs-utils \
-    # wsdd for Windows network discovery (WSD protocol)
-    wsdd \
-    # Python for utilities
+    # Network discovery and hostname resolution
+    avahi-daemon \
+    avahi-utils \
+    libnss-mdns \
+    dbus \
+    # Python for utilities and wsdd
     python3 \
+    python3-pip \
     python3-cups \
     # System utilities
     procps \
     curl \
+    libcurl4 \
     && rm -rf /var/lib/apt/lists/*
+
+# Install wsdd (Web Services Discovery Daemon) from GitHub
+# This enables Windows to discover the print server in Network
+RUN curl -L https://raw.githubusercontent.com/christgau/wsdd/master/src/wsdd.py -o /usr/local/bin/wsdd && \
+    chmod +x /usr/local/bin/wsdd
 
 # =============================================================================
 # Set Root Password for CUPS Administration
@@ -94,42 +100,10 @@ RUN printf "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}\n" | smbpasswd -s -a ${SAMBA_US
 RUN printf "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}\n" | smbpasswd -s -a root
 
 # =============================================================================
-# Create Startup Script
+# Copy Startup Script
 # =============================================================================
-COPY <<'EOF' /start.sh
-#!/bin/bash
-set -e
-
-echo "=============================================="
-echo "Docker Print Server Starting..."
-echo "=============================================="
-
-echo "[1/5] Starting CUPS print server..."
-cupsd
-
-echo "[2/5] Starting Samba NetBIOS daemon (nmbd)..."
-nmbd -D
-
-echo "[3/5] Starting Samba SMB daemon (smbd)..."
-smbd -D
-
-echo "[4/5] Starting wsdd (Windows Service Discovery)..."
-# wsdd enables Windows to discover this server via Network in File Explorer
-# -4 = IPv4 only, -p = run in foreground but we background it
-wsdd -4 &
-
-echo "[5/5] Starting DirectPrintClient..."
-echo "=============================================="
-echo "Services running:"
-echo "  - CUPS Web Interface: http://localhost:631"
-echo "  - DirectPrintClient:  http://localhost:8888"
-echo "  - Windows Printers:   \\\\<server-ip>\\printers"
-echo "  - Samba User:         printuser"
-echo "=============================================="
-
-exec /opt/directprint/DirectPrintClient --headless --shutdown-on-sigint --web-interface --remove-scales-support
-EOF
-RUN chmod +x /start.sh
+COPY scripts/start.sh /start.sh
+RUN sed -i 's/\r$//' /start.sh && chmod +x /start.sh
 
 # =============================================================================
 # Environment Variables
