@@ -1,30 +1,104 @@
-
+# =============================================================================
+# Docker Print Server - Docker Compose Configuration
+# =============================================================================
+#
+# Services:
+#   - CUPS:              Print server (http://localhost:631)
+#   - Samba:             Windows SMB printer sharing (\\server\printers)
+#   - wsdd:              Windows network discovery (WSD protocol)
+#   - DirectPrintClient: Odoo integration (http://localhost:8888)
+#
+# Usage:
+#   docker compose up -d --build    # Build and start
+#   docker compose logs -f          # View logs
+#   docker compose down             # Stop and remove
+#   docker compose restart          # Restart services
+#
+# Configuration:
+#   Copy .env.example to .env and modify settings as needed
+#
+# =============================================================================
 
 networks:
-  printnet:  # Now managed by Docker Compose
-    name: printnet  # Force the exact name to prevent prefixing
-    driver: bridge  # Standard bridge network
-
+  printnet:
+    name: printnet
+    driver: bridge
 
 services:
-  directprintclient:
+  print-server:
     build:
-      context: . # ✅ This tells Docker to use the current directory
-      dockerfile: Dockerfile  # ✅ Explicitly specify the Dockerfile name
-    container_name: directprintclient
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Credentials (override via .env file)
+        CUPS_ADMIN_PASSWORD: ${CUPS_ADMIN_PASSWORD:-adminpassword}
+        SAMBA_PASSWORD: ${SAMBA_PASSWORD:-printers}
+        SAMBA_USER: ${SAMBA_USER:-printuser}
+
+    container_name: print-server
+    hostname: print-server
     restart: unless-stopped
+
     environment:
       - CUPS_WEBINTERFACE=yes
-    volumes:
-      - ./cups_data:/etc/cups  # Mount CUPS configuration
-      - ./printers:/var/spool/cups  # Mount print queue
-      - ./cups_data/cupsd.conf:/etc/cups/cupsd.conf  # Override cupsd.conf
-      - ./smb.conf:/etc/samba/smb.conf # <- Mount from correct location
-    ports:
-      - "8888:8888"
-      - "631:631"
-      - "139:139"  # Samba NetBIOS Session
-      - "445:445"  # Samba SMB Direct
-    networks:
-      - printnet  # Attaches to printnet
+      - CUPS_SERVER_NAME=${CUPS_SERVER_NAME:-Print Server}
+      - TZ=${TZ:-UTC}
 
+    volumes:
+      # =======================================================================
+      # Configuration Files (templates, read-only where possible)
+      # =======================================================================
+      # CUPS main configuration
+      - ./config/cups/cupsd.conf:/etc/cups/cupsd.conf:ro
+
+      # Samba configuration
+      - ./config/samba/smb.conf:/etc/samba/smb.conf:ro
+
+      # =======================================================================
+      # Runtime Data (persisted, read-write)
+      # =======================================================================
+      # CUPS printer definitions and subscriptions
+      - ./data/cups:/etc/cups/ppd
+      - ./data/cups/printers.conf:/etc/cups/printers.conf
+      - ./data/cups/subscriptions.conf:/etc/cups/subscriptions.conf
+
+      # Print queue spool
+      - ./data/spool:/var/spool/cups
+
+    ports:
+      # DirectPrintClient web interface (Odoo integration)
+      - "8888:8888"
+
+      # CUPS web interface and IPP
+      - "631:631"
+
+      # Samba NetBIOS Session
+      - "139:139"
+
+      # Samba SMB Direct (Windows file/printer sharing)
+      - "445:445"
+
+      # wsdd WS-Discovery (Windows network discovery)
+      - "3702:3702/udp"
+      - "5357:5357"
+
+      # Raw printing (JetDirect/AppSocket) - optional
+      - "9100:9100"
+
+    networks:
+      - printnet
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # =========================================================================
+    # USB Printer Support (Optional)
+    # =========================================================================
+    # Uncomment these lines to allow USB device access for USB-connected printers
+    # Note: This requires the host to have USB devices passed through
+    # privileged: true
+    # devices:
+    #   - /dev/bus/usb:/dev/bus/usb

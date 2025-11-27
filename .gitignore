@@ -1,0 +1,49 @@
+# =============================================================================
+# Docker Print Server - Git Ignore Rules
+# =============================================================================
+
+# Python
+/.venv
+**/__pycache__
+
+# Environment configuration (contains secrets)
+.env
+
+# =============================================================================
+# Runtime Data
+# These files are generated at runtime and should not be committed
+# =============================================================================
+
+# Print queue spool data (job files)
+data/spool/c*
+data/spool/d*
+data/spool/*
+!data/spool/.gitkeep
+
+# CUPS backup files
+config/cups/*.conf.O
+data/cups/*.conf.O
+
+# =============================================================================
+# Legacy Paths (if migrating from old structure)
+# =============================================================================
+cups_data/
+printers/c*
+printers/d*
+smb.conf
+
+# =============================================================================
+# System files
+# =============================================================================
+.DS_Store
+Thumbs.db
+*.log
+
+# =============================================================================
+# IDE and Editor files
+# =============================================================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
