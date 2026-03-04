@@ -26,6 +26,12 @@ printf "%s\n%s\n" "${SAMBA_PASSWORD}" "${SAMBA_PASSWORD}" | smbpasswd -s -a root
 
 echo "  - CUPS admin user: root"
 echo "  - Samba user: ${SAMBA_USER}"
+
+# Update smb.conf valid users if SAMBA_USER is not the default
+if [ "${SAMBA_USER}" != "printuser" ]; then
+    sed -i "s/valid users = printuser, root/valid users = ${SAMBA_USER}, root/" /etc/samba/smb.conf
+fi
+
 echo "[1/6] Starting D-Bus (required for Avahi)..."
 mkdir -p /var/run/dbus
 dbus-daemon --system --fork 2>/dev/null || true
@@ -55,7 +61,7 @@ echo "Services running:"
 echo "  - CUPS Web Interface: http://localhost:631"
 echo "  - DirectPrintClient:  http://localhost:8888"
 echo "  - Windows Printers:   \\\\<server-ip>\\printers"
-echo "  - Samba User:         printuser"
+echo "  - Samba User:         ${SAMBA_USER}"
 echo "=============================================="
 
 # Try to start DirectPrintClient, but don't crash if it fails

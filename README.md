@@ -8,7 +8,7 @@ A containerized print server solution for industrial environments that integrate
 
 This solution allows you to deploy a print server on a local VM and connect various printers (label printers, regular printers, etc.) to Odoo via Ventor Tech's Direct Print module.
 
-> **Note**: The host VM can be any OS that supports Docker (Linux, Windows, macOS). The container runs Debian 11 internally, ensuring consistent behavior across different host platforms.
+> **Note**: The host VM can be any OS that supports Docker (Linux, Windows, macOS). The container runs Ubuntu 22.04 internally, ensuring consistent behavior across different host platforms.
 
 ---
 
@@ -33,7 +33,7 @@ This solution allows you to deploy a print server on a local VM and connect vari
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         Docker Container (Debian 11)                      │
+│                         Docker Container (Ubuntu 22.04)                   │
 │                                                                           │
 │  ┌─────────────────┐  ┌──────────┐  ┌──────────┐  ┌───────────────────┐  │
 │  │ DirectPrint     │  │   CUPS   │  │   wsdd   │  │      Samba        │  │
@@ -82,7 +82,7 @@ docker_print_server/
 │   │   └── subscriptions.conf       # CUPS subscriptions
 │   └── spool/                       # Print queue (job files)
 ├── directprint/                     # DirectPrintClient binary
-│   └── DirectPrintClient-X.XX.XX-debian_11-x86_64/
+│   └── DirectPrintClient-X.XX.XX-ubuntu-22.04-x86_64.tar.gz
 ├── docs/                            # Documentation
 │   └── *.docx                       # Admin instructions
 ├── scripts/                         # Utility scripts
@@ -155,6 +155,8 @@ cd docker_print_server
 cp .env.example .env
 nano .env  # Edit configuration as needed (IMPORTANT: change passwords!)
 
+# Or edit docker-compose.yml environment section directly
+
 # Build and start the container
 docker compose up -d --build
 ```
@@ -171,9 +173,8 @@ ssh user@server-ip
 # Navigate to the directory
 cd /opt/docker_print_server
 
-# Copy environment template and configure
-cp .env.example .env
-nano .env  # Edit configuration as needed (IMPORTANT: change passwords!)
+# Configure credentials in docker-compose.yml environment section
+nano docker-compose.yml  # Edit environment values (IMPORTANT: change passwords!)
 
 # Build and start the container
 docker compose up -d --build
@@ -201,10 +202,12 @@ curl http://localhost:8888
 
 ### Environment Variables
 
-Create a `.env` file from the template:
+Configuration is set directly in the `environment` section of `docker-compose.yml`.
+You can also override values via a `.env` file or CLI:
 
 ```bash
-cp .env.example .env
+# Override via CLI
+docker compose run -e CUPS_ADMIN_PASSWORD=mysecret print-server
 ```
 
 Available configuration options:
@@ -355,7 +358,7 @@ When Ventor Tech releases a new version of DirectPrintClient, follow these steps
 ### Step 1: Download the New Version
 
 1. Go to [Ventor Tech's website](https://ventor.tech/) and download the latest DirectPrintClient
-2. Choose the **Debian 11 x86_64** version (filename: `DirectPrintClient-X.XX.XX-debian_11-x86_64.tar.gz`)
+2. Choose the **Ubuntu 22.04 x86_64** version (filename: `DirectPrintClient-X.XX.XX-ubuntu-22.04-x86_64.tar.gz`)
 
 ### Step 2: Remove the Old Version
 
@@ -363,29 +366,30 @@ When Ventor Tech releases a new version of DirectPrintClient, follow these steps
 # Navigate to the directprint folder
 cd directprint/
 
-# Delete the OLD version folder entirely
-rm -rf DirectPrintClient-4.27.17-debian_11-x86_64/
+# Delete the OLD version tarball
+rm -f DirectPrintClient-4.27.12-ubuntu-22.04-x86_64.tar.gz
 ```
 
-### Step 3: Extract the New Version
+### Step 3: Add the New Version
 
 ```bash
-# Extract the new version (replace X.XX.XX with the actual version number)
-tar -xzf DirectPrintClient-X.XX.XX-debian_11-x86_64.tar.gz
-
-# You should now have: directprint/DirectPrintClient-X.XX.XX-debian_11-x86_64/
+# Copy or move the new tarball into the directprint/ folder
+# (replace X.XX.XX with the actual version number)
+mv ~/Downloads/DirectPrintClient-X.XX.XX-ubuntu-22.04-x86_64.tar.gz directprint/
 ```
 
 ### Step 4: Update the Dockerfile
 
-Edit `Dockerfile` and update the version number on this line (around line 76):
+Edit `Dockerfile` and update the version number on these lines:
 
 ```dockerfile
 # BEFORE (old version)
-COPY directprint/DirectPrintClient-4.27.17-debian_11-x86_64/ /opt/directprint/
+ADD directprint/DirectPrintClient-4.27.12-ubuntu-22.04-x86_64.tar.gz /opt/
+RUN mv /opt/DirectPrintClient-4.27.12-ubuntu-22.04-x86_64 /opt/directprint && \
 
 # AFTER (new version - replace X.XX.XX with actual version)
-COPY directprint/DirectPrintClient-X.XX.XX-debian_11-x86_64/ /opt/directprint/
+ADD directprint/DirectPrintClient-X.XX.XX-ubuntu-22.04-x86_64.tar.gz /opt/
+RUN mv /opt/DirectPrintClient-X.XX.XX-ubuntu-22.04-x86_64 /opt/directprint && \
 ```
 
 ### Step 5: Rebuild and Restart
@@ -515,8 +519,8 @@ cat /var/log/syslog | grep DirectPrint
 
 ### Production Deployment Checklist
 
-- [ ] Change default `CUPS_ADMIN_PASSWORD` in `.env`
-- [ ] Change default `SAMBA_PASSWORD` in `.env`
+- [ ] Change default `CUPS_ADMIN_PASSWORD` in `docker-compose.yml`
+- [ ] Change default `SAMBA_PASSWORD` in `docker-compose.yml`
 - [ ] Restrict network access to management ports (631, 8888)
 - [ ] Enable HTTPS for CUPS if accessible externally
 - [ ] Regularly rebuild to get security updates: `docker compose up -d --build`
@@ -538,7 +542,7 @@ For production environments, consider:
 Important data to backup:
 - `data/cups/` - Printer definitions and subscriptions
 - `config/` - Configuration files (if customized)
-- `.env` - Environment configuration
+- `docker-compose.yml` - Service configuration and credentials
 
 ```bash
 # Create backup

@@ -86,8 +86,8 @@ Write-Host ""
 Write-Host "--- Network Ports ---"
 Test-TcpPort -Name "CUPS (IPP)" -Port 631
 Test-TcpPort -Name "DirectPrintClient" -Port 8888
-Test-TcpPort -Name "Samba NetBIOS" -Port 139
-Test-TcpPort -Name "Samba SMB" -Port 445
+Test-TcpPort -Name "Samba NetBIOS" -Port 1139
+Test-TcpPort -Name "Samba SMB" -Port 1445
 
 Write-Host ""
 Write-Host "--- Container Services ---"

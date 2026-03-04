@@ -77,8 +77,8 @@ echo ""
 echo "--- Network Ports ---"
 test_port "CUPS (IPP)" 631
 test_port "DirectPrintClient" 8888
-test_port "Samba NetBIOS" 139
-test_port "Samba SMB" 445
+test_port "Samba NetBIOS" 1139
+test_port "Samba SMB" 1445
 
 echo ""
 echo "--- Container Services ---"
