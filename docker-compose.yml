@@ -28,7 +28,7 @@ networks:
 
 services:
   print-server:
-    image: ghcr.io/vertec-io/docker_print_server:latest
+    image: ghcr.io/deathvenom-qvp/docker_print_server:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -41,30 +41,27 @@ services:
       - CUPS_ADMIN_PASSWORD=adminpassword
       - SAMBA_PASSWORD=printers
       - SAMBA_USER=printuser
-      - CUPS_WEBINTERFACE=yes
       - CUPS_SERVER_NAME=Print Server
       - TZ=UTC
 
     volumes:
       # =======================================================================
-      # Configuration Files (templates, read-only where possible)
+      # Persistent Data (named volumes)
       # =======================================================================
-      # CUPS main configuration
-      - ./config/cups/cupsd.conf:/etc/cups/cupsd.conf:ro
-
-      # Samba configuration
-      - ./config/samba/smb.conf:/etc/samba/smb.conf:ro
-
-      # =======================================================================
-      # Runtime Data (persisted, read-write)
-      # =======================================================================
-      # CUPS printer definitions and subscriptions
-      - ./data/cups:/etc/cups/ppd
-      - ./data/cups/printers.conf:/etc/cups/printers.conf
-      - ./data/cups/subscriptions.conf:/etc/cups/subscriptions.conf
+      # CUPS configuration, printer definitions, PPDs, and subscriptions
+      # On first run Docker auto-populates this from the image defaults
+      - cups-config:/etc/cups
 
       # Print queue spool
-      - ./data/spool:/var/spool/cups
+      - cups-spool:/var/spool/cups
+
+      # =======================================================================
+      # Optional: Override config files from host (uncomment if needed)
+      # Only use these if you cloned the repo or created the files on the host.
+      # The image already contains working defaults.
+      # =======================================================================
+      # - ./config/cups/cupsd.conf:/etc/cups/cupsd.conf:ro
+      # - ./config/samba/smb.conf:/etc/samba/smb.conf:ro
 
     ports:
       # DirectPrintClient web interface (Odoo integration)
@@ -105,3 +102,7 @@ services:
     # privileged: true
     # devices:
     #   - /dev/bus/usb:/dev/bus/usb
+
+volumes:
+  cups-config:
+  cups-spool:

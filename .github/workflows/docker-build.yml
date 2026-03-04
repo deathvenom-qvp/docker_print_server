@@ -11,7 +11,7 @@
 #   - Manual dispatch
 #
 # Usage (pull the image):
-#   docker pull ghcr.io/vertec-io/docker_print_server:latest
+#   docker pull ghcr.io/deathvenom-qvp/docker_print_server:latest
 #
 # =============================================================================
 

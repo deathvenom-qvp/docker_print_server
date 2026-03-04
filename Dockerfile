@@ -93,6 +93,16 @@ RUN mkdir -p /var/log/samba
 # Samba user and passwords are configured at runtime via environment variables
 
 # =============================================================================
+# Copy Default Configuration Files
+# =============================================================================
+# These are baked into the image so it works standalone without bind mounts.
+# Users can override them with volume mounts if needed.
+COPY config/cups/cupsd.conf /etc/cups/cupsd.conf
+COPY config/samba/smb.conf /etc/samba/smb.conf
+COPY data/cups/printers.conf /etc/cups/printers.conf
+COPY data/cups/subscriptions.conf /etc/cups/subscriptions.conf
+
+# =============================================================================
 # Copy Startup Script
 # =============================================================================
 COPY scripts/start.sh /start.sh

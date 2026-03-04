@@ -2,7 +2,7 @@
 
 A containerized print server combining CUPS, Samba, wsdd, and [Ventor Tech DirectPrintClient](https://ventor.tech/) in a single Docker image. Designed for environments that need to share printers with Windows clients and optionally bridge them to Odoo ERP.
 
-**Image:** `ghcr.io/vertec-io/docker_print_server:latest`
+**Image:** `ghcr.io/deathvenom-qvp/docker_print_server:latest`
 
 | Service | Port | Purpose |
 |---------|------|---------|
@@ -21,13 +21,13 @@ A containerized print server combining CUPS, Samba, wsdd, and [Ventor Tech Direc
 ### Pull and Run (recommended)
 
 ```bash
-docker pull ghcr.io/vertec-io/docker_print_server:latest
+docker pull ghcr.io/deathvenom-qvp/docker_print_server:latest
 ```
 
 Clone the repo (or just grab the compose file and configs):
 
 ```bash
-git clone https://github.com/vertec-io/docker_print_server.git
+git clone https://github.com/deathvenom-qvp/docker_print_server.git
 cd docker_print_server
 ```
 
@@ -55,7 +55,7 @@ curl -s http://localhost:8888 # DirectPrintClient
 
 ## Deploy the Pre-Built Image (No Clone Required)
 
-You can run the print server on any Docker host without cloning this repo. Just create a `docker-compose.yml` and the required config files.
+You can run the print server on any Docker host without cloning this repo. The image includes all config files with working defaults — just create a `docker-compose.yml`.
 
 ### 1. Create a project directory
 
@@ -73,7 +73,7 @@ networks:
 
 services:
   print-server:
-    image: ghcr.io/vertec-io/docker_print_server:latest
+    image: ghcr.io/deathvenom-qvp/docker_print_server:latest
     container_name: print-server
     hostname: print-server
     restart: unless-stopped
@@ -86,12 +86,8 @@ services:
       - TZ=UTC
 
     volumes:
-      - ./config/cups/cupsd.conf:/etc/cups/cupsd.conf:ro
-      - ./config/samba/smb.conf:/etc/samba/smb.conf:ro
-      - ./data/cups:/etc/cups/ppd
-      - ./data/cups/printers.conf:/etc/cups/printers.conf
-      - ./data/cups/subscriptions.conf:/etc/cups/subscriptions.conf
-      - ./data/spool:/var/spool/cups
+      - cups-config:/etc/cups
+      - cups-spool:/var/spool/cups
 
     ports:
       - "631:631"         # CUPS web UI / IPP
@@ -110,38 +106,21 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+volumes:
+  cups-config:
+  cups-spool:
 ```
 
-### 3. Download the config files
-
-```bash
-# Create directories
-mkdir -p config/cups config/samba data/cups data/spool
-
-# CUPS config
-curl -fsSL https://raw.githubusercontent.com/vertec-io/docker_print_server/main/config/cups/cupsd.conf \
-  -o config/cups/cupsd.conf
-
-# Samba config
-curl -fsSL https://raw.githubusercontent.com/vertec-io/docker_print_server/main/config/samba/smb.conf \
-  -o config/samba/smb.conf
-
-# CUPS data files (empty templates)
-curl -fsSL https://raw.githubusercontent.com/vertec-io/docker_print_server/main/data/cups/printers.conf \
-  -o data/cups/printers.conf
-curl -fsSL https://raw.githubusercontent.com/vertec-io/docker_print_server/main/data/cups/subscriptions.conf \
-  -o data/cups/subscriptions.conf
-```
-
-### 4. Start
+### 3. Start
 
 ```bash
 docker compose up -d
 ```
 
-The container will pull from `ghcr.io/vertec-io/docker_print_server:latest`, configure credentials at startup, and begin running all services.
+That's it. The image has built-in CUPS and Samba configs. Printer data persists in the named volumes.
 
-### 5. Access
+### 4. Access
 
 | Interface | URL |
 |-----------|-----|
@@ -178,15 +157,18 @@ docker compose run -e CUPS_ADMIN_PASSWORD=mysecret -e SAMBA_PASSWORD=s3cret prin
 
 Credentials are applied at container startup (not baked into the image), so you can change them and just restart — no rebuild needed.
 
-### Config Files (mounted as volumes)
+### Persisted Data (named volumes)
 
-| File | Purpose |
-|------|---------|
-| `config/cups/cupsd.conf` | CUPS server configuration (read-only mount) |
-| `config/samba/smb.conf` | Samba configuration (read-only mount) |
-| `data/cups/printers.conf` | Printer definitions (read-write, persisted) |
-| `data/cups/subscriptions.conf` | CUPS subscriptions (read-write, persisted) |
-| `data/spool/` | Print queue spool (read-write, persisted) |
+The image bakes in working default configs. Named Docker volumes persist runtime data across restarts:
+
+| Volume | Container Path | Contents |
+|--------|---------------|----------|
+| `cups-config` | `/etc/cups` | CUPS config, printer definitions, PPDs, subscriptions |
+| `cups-spool` | `/var/spool/cups` | Print queue spool |
+
+Samba config (`/etc/samba/smb.conf`) is baked into the image and re-configured at each startup from environment variables — it does not need a volume.
+
+To override a config file from the host, uncomment the bind-mount lines in `docker-compose.yml`.
 
 ---
 
@@ -328,11 +310,16 @@ docker compose exec print-server bash  # Shell access
 ## Backup & Maintenance
 
 ```bash
-# Backup printer config and data
+# Backup named volumes (pull-based deployment)
+docker run --rm -v cups-config:/data -v "$(pwd)":/backup alpine \
+  tar -czvf /backup/cups-config-backup-$(date +%Y%m%d).tar.gz -C /data .
+
+# Backup (git-clone deployment with local files)
 tar -czvf print-server-backup-$(date +%Y%m%d).tar.gz data/ config/ docker-compose.yml
 
-# Restore
-tar -xzvf print-server-backup-YYYYMMDD.tar.gz
+# Restore a volume backup
+docker run --rm -v cups-config:/data -v "$(pwd)":/backup alpine \
+  sh -c 'cd /data && tar -xzvf /backup/cups-config-backup-YYYYMMDD.tar.gz'
 ```
 
 Docker log rotation is configured (10 MB × 3 files).
