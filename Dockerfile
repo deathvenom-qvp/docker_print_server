@@ -16,13 +16,6 @@
 FROM ubuntu:22.04
 
 # =============================================================================
-# Build Arguments (can be overridden at build time or via .env)
-# =============================================================================
-ARG CUPS_ADMIN_PASSWORD=adminpassword
-ARG SAMBA_PASSWORD=printers
-ARG SAMBA_USER=printuser
-
-# =============================================================================
 # Prevent interactive prompts during package installation
 # =============================================================================
 ENV DEBIAN_FRONTEND=noninteractive
@@ -69,15 +62,9 @@ RUN curl -L https://raw.githubusercontent.com/christgau/wsdd/master/src/wsdd.py 
     chmod +x /usr/local/bin/wsdd
 
 # =============================================================================
-# Set Root Password for CUPS Administration
+# CUPS admin password and Samba user/password are configured at runtime
+# via environment variables (see start.sh)
 # =============================================================================
-RUN echo "root:${CUPS_ADMIN_PASSWORD}" | chpasswd
-
-# =============================================================================
-# Create Samba Print User
-# =============================================================================
-# Create a dedicated user for Samba print access (more secure than using root)
-RUN useradd -r -s /sbin/nologin ${SAMBA_USER}
 
 # =============================================================================
 # Copy and Extract DirectPrintClient
@@ -103,12 +90,7 @@ RUN mkdir -p /var/spool/samba && \
 # Create Samba log directory
 RUN mkdir -p /var/log/samba
 
-# Set up Samba user with configured password
-# This is the user Windows clients will authenticate with
-RUN printf "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}\n" | smbpasswd -s -a ${SAMBA_USER}
-
-# Also set up root as fallback
-RUN printf "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}\n" | smbpasswd -s -a root
+# Samba user and passwords are configured at runtime via environment variables
 
 # =============================================================================
 # Copy Startup Script

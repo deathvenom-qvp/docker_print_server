@@ -29,20 +29,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        # Credentials (override via .env file)
-        CUPS_ADMIN_PASSWORD: ${CUPS_ADMIN_PASSWORD:-adminpassword}
-        SAMBA_PASSWORD: ${SAMBA_PASSWORD:-printers}
-        SAMBA_USER: ${SAMBA_USER:-printuser}
 
     container_name: print-server
     hostname: print-server
     restart: unless-stopped
 
     environment:
+      - CUPS_ADMIN_PASSWORD=adminpassword
+      - SAMBA_PASSWORD=printers
+      - SAMBA_USER=printuser
       - CUPS_WEBINTERFACE=yes
-      - CUPS_SERVER_NAME=${CUPS_SERVER_NAME:-Print Server}
-      - TZ=${TZ:-UTC}
+      - CUPS_SERVER_NAME=Print Server
+      - TZ=UTC
 
     volumes:
       # =======================================================================
@@ -75,10 +73,10 @@ services:
       # Samba NetBIOS Session
       # Note: On Windows hosts, use alternate ports (1139/1445) since Windows uses 139/445
       # On Linux/macOS hosts or production VMs, use standard ports (139/445)
-      - "${SMB_NETBIOS_PORT:-1139}:139"
+      - "1139:139"
 
       # Samba SMB Direct (Windows file/printer sharing)
-      - "${SMB_PORT:-1445}:445"
+      - "1445:445"
 
       # wsdd WS-Discovery (Windows network discovery)
       - "3702:3702/udp"

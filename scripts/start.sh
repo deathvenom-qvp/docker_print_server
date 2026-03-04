@@ -3,7 +3,29 @@
 echo "=============================================="
 echo "Docker Print Server Starting..."
 echo "=============================================="
+# =============================================
+# Configure credentials from environment variables
+# =============================================
+CUPS_ADMIN_PASSWORD=${CUPS_ADMIN_PASSWORD:-adminpassword}
+SAMBA_PASSWORD=${SAMBA_PASSWORD:-printers}
+SAMBA_USER=${SAMBA_USER:-printuser}
 
+echo "[0/6] Configuring credentials..."
+
+# Set root password for CUPS web administration
+echo "root:${CUPS_ADMIN_PASSWORD}" | chpasswd
+
+# Create Samba print user if it doesn't already exist
+if ! id "${SAMBA_USER}" &>/dev/null; then
+    useradd -r -s /sbin/nologin "${SAMBA_USER}"
+fi
+
+# Set Samba passwords
+printf "%s\n%s\n" "${SAMBA_PASSWORD}" "${SAMBA_PASSWORD}" | smbpasswd -s -a "${SAMBA_USER}"
+printf "%s\n%s\n" "${SAMBA_PASSWORD}" "${SAMBA_PASSWORD}" | smbpasswd -s -a root
+
+echo "  - CUPS admin user: root"
+echo "  - Samba user: ${SAMBA_USER}"
 echo "[1/6] Starting D-Bus (required for Avahi)..."
 mkdir -p /var/run/dbus
 dbus-daemon --system --fork 2>/dev/null || true
