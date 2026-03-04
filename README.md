@@ -144,24 +144,46 @@ Ensure the following ports are open in your firewall:
 
 ## Deployment
 
-### Option 1: Git Clone (Recommended for Development)
+### Option 1: Docker Pull (Recommended for Production)
+
+The image is automatically built and published to GitHub Container Registry.
+
+```bash
+# Create a project directory
+mkdir -p /opt/docker_print_server && cd /opt/docker_print_server
+
+# Download docker-compose.yml (or copy it from the repo)
+curl -LO https://raw.githubusercontent.com/vertec-io/docker_print_server/main/docker-compose.yml
+
+# Download config files
+mkdir -p config/cups config/samba data/cups data/spool
+curl -L https://raw.githubusercontent.com/vertec-io/docker_print_server/main/config/cups/cupsd.conf -o config/cups/cupsd.conf
+curl -L https://raw.githubusercontent.com/vertec-io/docker_print_server/main/config/samba/smb.conf -o config/samba/smb.conf
+curl -L https://raw.githubusercontent.com/vertec-io/docker_print_server/main/data/cups/printers.conf -o data/cups/printers.conf
+curl -L https://raw.githubusercontent.com/vertec-io/docker_print_server/main/data/cups/subscriptions.conf -o data/cups/subscriptions.conf
+
+# Edit credentials (IMPORTANT: change passwords!)
+nano docker-compose.yml
+
+# Pull and start the container
+docker compose up -d
+```
+
+### Option 2: Git Clone (Development / Custom Builds)
 
 ```bash
 # Clone the repository
 git clone git@github.com:vertec-io/docker_print_server.git
 cd docker_print_server
 
-# Copy environment template and configure
-cp .env.example .env
-nano .env  # Edit configuration as needed (IMPORTANT: change passwords!)
+# Edit credentials in docker-compose.yml (IMPORTANT: change passwords!)
+nano docker-compose.yml
 
-# Or edit docker-compose.yml environment section directly
-
-# Build and start the container
+# Build locally and start the container
 docker compose up -d --build
 ```
 
-### Option 2: SCP Transfer (Production Deployment)
+### Option 3: SCP Transfer (Offline Deployment)
 
 ```bash
 # On your local machine, transfer files to server

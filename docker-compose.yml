@@ -9,7 +9,8 @@
 #   - DirectPrintClient: Odoo integration (http://localhost:8888)
 #
 # Usage:
-#   docker compose up -d --build    # Build and start
+#   docker compose up -d --build    # Build locally and start
+#   docker compose up -d            # Pull from GHCR and start
 #   docker compose logs -f          # View logs
 #   docker compose down             # Stop and remove
 #   docker compose restart          # Restart services
@@ -27,6 +28,7 @@ networks:
 
 services:
   print-server:
+    image: ghcr.io/vertec-io/docker_print_server:latest
     build:
       context: .
       dockerfile: Dockerfile
