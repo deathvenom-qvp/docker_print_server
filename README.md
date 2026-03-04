@@ -12,7 +12,7 @@ A containerized print server combining CUPS, Samba, wsdd, and [Ventor Tech Direc
 | wsdd | 3702/udp, 5357 | Windows network discovery |
 | Raw printing | 9100 | JetDirect / AppSocket (optional) |
 
-> Internally the container maps 139/445 for Samba. The default host ports are 1139/1445 to avoid conflicts on Windows hosts. On Linux production VMs you can change these to 139/445 in `docker-compose.yml`.
+> Internally the container maps 139/445 for Samba. The default host ports are 1139/1445 to avoid conflicts on Windows hosts. On Linux production VMs you can change these to 139/445 in `docker-compose.yml`, or use the **macvlan** compose file to give the container its own LAN IP with standard ports.
 
 ---
 
@@ -137,6 +137,134 @@ docker compose up -d
 
 ---
 
+## Macvlan Networking (Dedicated LAN IP)
+
+For production deployments — especially on servers like TrueNAS, Proxmox, or bare-metal Linux — macvlan gives the container its **own IP address on your physical LAN**. This eliminates port-mapping issues and lets Windows clients connect on standard ports (445, 139, 631).
+
+### Why macvlan?
+
+| Feature | Bridge (default) | Macvlan |
+|---------|------------------|---------|
+| Container IP | Shares host IP | Own LAN IP |
+| Samba ports | 1139/1445 (remapped) | 139/445 (standard) |
+| Windows discovery | May need manual setup | Native via wsdd |
+| Port conflicts | Possible on Windows hosts | None |
+| Network config | None | Requires subnet/gateway/interface |
+
+### Quick Start (macvlan)
+
+1. Find your host's network interface and subnet:
+
+```bash
+ip route show default
+# example output: default via 192.168.1.1 dev eth0
+
+ip addr show eth0
+# example output: inet 192.168.1.50/24
+```
+
+2. Edit `docker-compose.macvlan.yml` — update these values:
+
+```yaml
+networks:
+  macvlan_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0                   # your host interface
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24     # your LAN subnet
+          gateway: 192.168.1.1       # your gateway
+          ip_range: 192.168.1.240/29 # small range for Docker containers
+
+services:
+  print-server:
+    networks:
+      macvlan_net:
+        ipv4_address: 192.168.1.240  # static IP for the print server
+```
+
+3. Start with the macvlan compose file:
+
+```bash
+docker compose -f docker-compose.macvlan.yml up -d
+```
+
+4. Access services on the container's dedicated IP:
+
+| Interface | URL |
+|-----------|-----|
+| CUPS Admin | `http://192.168.1.240:631` |
+| DirectPrintClient | `http://192.168.1.240:8888` |
+| Windows Printers | `\\192.168.1.240\printers` (standard port 445) |
+
+### Deploy macvlan without cloning (standalone)
+
+Create a `docker-compose.macvlan.yml` on any Docker host:
+
+```yaml
+networks:
+  macvlan_net:
+    name: print-macvlan
+    driver: macvlan
+    driver_opts:
+      parent: eth0                      # CHANGE: your host network interface
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24        # CHANGE: your LAN subnet
+          gateway: 192.168.1.1          # CHANGE: your LAN gateway
+          ip_range: 192.168.1.240/29    # CHANGE: small range for containers
+
+services:
+  print-server:
+    image: ghcr.io/deathvenom-qvp/docker_print_server:latest
+    container_name: print-server
+    hostname: print-server
+    restart: unless-stopped
+    environment:
+      - CUPS_ADMIN_PASSWORD=changeme
+      - SAMBA_PASSWORD=changeme
+      - SAMBA_USER=printuser
+      - CUPS_SERVER_NAME=Print Server
+      - TZ=UTC
+    volumes:
+      - cups-config:/etc/cups
+      - cups-spool:/var/spool/cups
+    networks:
+      macvlan_net:
+        ipv4_address: 192.168.1.240     # CHANGE: static IP for container
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  cups-config:
+  cups-spool:
+```
+
+Then:
+
+```bash
+docker compose -f docker-compose.macvlan.yml up -d
+```
+
+### Macvlan notes
+
+- **Choose an IP outside your DHCP range** to avoid address conflicts.
+- The Docker host **cannot reach the container** via the macvlan IP by default. If you need host → container access, create a macvlan sub-interface on the host:
+  ```bash
+  sudo ip link add macvlan-shim link eth0 type macvlan mode bridge
+  sudo ip addr add 192.168.1.241/32 dev macvlan-shim
+  sudo ip link set macvlan-shim up
+  sudo ip route add 192.168.1.240/32 dev macvlan-shim
+  ```
+- On **TrueNAS Scale**, use the host interface that has LAN access (check `ip link show`).
+- On **Proxmox**, ensure the VM/CT network bridge has promiscuous mode enabled.
+
+---
+
 ## Configuration
 
 All settings are environment variables in the `environment` section of `docker-compose.yml`. Change them there, or override via CLI:
@@ -250,7 +378,8 @@ docker_print_server/
 │   ├── test.sh                        # Linux test script
 │   └── test.ps1                       # PowerShell test script
 ├── .env.example                       # Optional env overrides
-├── docker-compose.yml                 # Service definition
+├── docker-compose.yml                 # Service definition (bridge network)
+├── docker-compose.macvlan.yml         # Service definition (macvlan network)
 ├── Dockerfile                         # Image build
 └── README.md
 ```
@@ -295,6 +424,8 @@ docker compose exec print-server bash  # Shell access
 | "Access Denied" | Confirm `SAMBA_USER` / `SAMBA_PASSWORD` match what you entered |
 | Server not in Network | Ensure 3702/udp and 5357 are open for wsdd |
 | DirectPrintClient won't start | Check logs — may need library updates on newer OS releases |
+| Macvlan: host can't reach container | Create a macvlan shim interface (see Macvlan notes above) |
+| Macvlan: container has no network | Verify parent interface, subnet, and gateway match your LAN |
 
 ---
 

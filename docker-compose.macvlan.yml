@@ -1,0 +1,92 @@
+# =============================================================================
+# Docker Print Server - Macvlan Network Override
+# =============================================================================
+#
+# Macvlan gives the container its own IP address on your physical LAN.
+# This is ideal for print servers because:
+#   - Standard ports (139, 445, 631) are used directly without mapping
+#   - Windows clients can discover the server natively on the LAN
+#   - No port conflicts with the Docker host
+#
+# Prerequisites:
+#   - Know your LAN subnet, gateway, and an available static IP
+#   - The Docker host's network interface supports promiscuous mode
+#   - Choose an IP outside your DHCP range to avoid conflicts
+#
+# Usage:
+#   docker compose -f docker-compose.macvlan.yml up -d
+#
+# IMPORTANT: Edit the network settings below to match your environment:
+#   - parent:  your host's network interface (e.g. eth0, ens18, enp3s0)
+#   - subnet:  your LAN subnet
+#   - gateway: your default gateway
+#   - ipv4_address: the static IP for this container
+#
+# To find your host interface and subnet:
+#   ip route show default            # shows gateway and interface
+#   ip addr show <interface>         # shows subnet
+#
+# =============================================================================
+
+networks:
+  macvlan_net:
+    name: print-macvlan
+    driver: macvlan
+    driver_opts:
+      parent: eth0                  # <-- CHANGE: your host network interface
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24    # <-- CHANGE: your LAN subnet
+          gateway: 192.168.1.1      # <-- CHANGE: your LAN gateway
+          ip_range: 192.168.1.240/29 # <-- CHANGE: small range for containers
+
+services:
+  print-server:
+    image: ghcr.io/deathvenom-qvp/docker_print_server:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: print-server
+    hostname: print-server
+    restart: unless-stopped
+
+    environment:
+      - CUPS_ADMIN_PASSWORD=adminpassword
+      - SAMBA_PASSWORD=printers
+      - SAMBA_USER=printuser
+      - CUPS_SERVER_NAME=Print Server
+      - TZ=UTC
+
+    volumes:
+      - cups-config:/etc/cups
+      - cups-spool:/var/spool/cups
+
+    # Macvlan: no port mappings needed — the container has its own LAN IP
+    # All services are accessible directly on standard ports:
+    #   CUPS:              http://<container-ip>:631
+    #   DirectPrintClient: http://<container-ip>:8888
+    #   Samba:             \\<container-ip>\printers  (ports 139/445)
+    #   wsdd:              auto-discovery on the LAN
+    #   Raw printing:      <container-ip>:9100
+
+    networks:
+      macvlan_net:
+        ipv4_address: 192.168.1.240  # <-- CHANGE: static IP for the container
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # =========================================================================
+    # USB Printer Support (Optional)
+    # =========================================================================
+    # privileged: true
+    # devices:
+    #   - /dev/bus/usb:/dev/bus/usb
+
+volumes:
+  cups-config:
+  cups-spool:

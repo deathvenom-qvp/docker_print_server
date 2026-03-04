@@ -13,7 +13,7 @@
 #
 # =============================================================================
 
-set -e
+# Don't use 'set -e' — we want all tests to run even if some fail
 
 # Colors for output
 RED='\033[0;31m'
@@ -111,7 +111,7 @@ else
 fi
 
 echo -n "Testing wsdd daemon... "
-if docker exec print-server pgrep wsdd > /dev/null 2>&1; then
+if docker exec print-server pgrep -f wsdd > /dev/null 2>&1; then
     echo -e "${GREEN}PASS${NC}"
     ((PASSED++))
 else

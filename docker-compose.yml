@@ -15,6 +15,10 @@
 #   docker compose down             # Stop and remove
 #   docker compose restart          # Restart services
 #
+# Macvlan Networking (container gets its own LAN IP):
+#   docker compose -f docker-compose.macvlan.yml up -d
+#   See docker-compose.macvlan.yml for details
+#
 # Configuration:
 #   Edit the 'environment' section below to change settings
 #   Or override via CLI: docker compose run -e VAR=value print-server
@@ -25,6 +29,11 @@ networks:
   printnet:
     name: printnet
     driver: bridge
+    # =========================================================================
+    # Alternative: Macvlan network (container gets its own LAN IP)
+    # Use instead: docker compose -f docker-compose.macvlan.yml up -d
+    # See docker-compose.macvlan.yml for macvlan setup with static IP
+    # =========================================================================
 
 services:
   print-server:
