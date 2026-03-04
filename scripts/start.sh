@@ -11,6 +11,23 @@ SAMBA_PASSWORD=${SAMBA_PASSWORD:-printers}
 SAMBA_USER=${SAMBA_USER:-printuser}
 CUPS_SERVER_NAME=${CUPS_SERVER_NAME:-Print Server}
 
+# =============================================
+# Restore missing CUPS config files from defaults
+# =============================================
+# The named volume cups-config:/etc/cups may be empty on first run or
+# after a failed startup. Restore any missing files from the pristine
+# copies baked into /etc/cups-defaults/ during the image build.
+if [ -d /etc/cups-defaults ]; then
+    for f in cupsd.conf printers.conf subscriptions.conf; do
+        if [ ! -f "/etc/cups/$f" ]; then
+            echo "  [init] Restoring missing /etc/cups/$f from defaults"
+            cp "/etc/cups-defaults/$f" "/etc/cups/$f"
+        fi
+    done
+    # Ensure the PPD directory exists
+    mkdir -p /etc/cups/ppd
+fi
+
 echo "[0/6] Configuring credentials and settings..."
 
 # Set root password for CUPS web administration

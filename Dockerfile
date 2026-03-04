@@ -103,6 +103,18 @@ COPY data/cups/printers.conf /etc/cups/printers.conf
 COPY data/cups/subscriptions.conf /etc/cups/subscriptions.conf
 
 # =============================================================================
+# Backup Default Configs
+# =============================================================================
+# Named volumes mount over /etc/cups at runtime. If the volume is empty
+# (e.g. first run, or stale from a failed attempt), cupsd.conf will be
+# missing. Store pristine defaults in a separate path that the entrypoint
+# can restore from.
+RUN mkdir -p /etc/cups-defaults && \
+    cp /etc/cups/cupsd.conf      /etc/cups-defaults/cupsd.conf && \
+    cp /etc/cups/printers.conf   /etc/cups-defaults/printers.conf && \
+    cp /etc/cups/subscriptions.conf /etc/cups-defaults/subscriptions.conf
+
+# =============================================================================
 # Copy Startup Script
 # =============================================================================
 COPY scripts/start.sh /start.sh
